@@ -215,7 +215,7 @@ def full_analysis(
     except Exception as e:
         raise HTTPException(
             status_code=500,
-            detail="An error occurred during full analysis processing."
+            detail=f"An error occurred during full analysis processing: {str(e)}"
         )
 
 @app.post("/recommend-project")
@@ -245,34 +245,40 @@ def recommend_project_api(
 def compare_repositories(
     request: RepositoryComparisonRequest
 ):
-    comparison_results = []
+    try:
+        comparison_results = []
 
-    for github_url in request.repositories:
-        repo_result = analyze_repository_data(github_url)
-        
-        recovery_analysis = analyze_recovery(repo_result)
+        for github_url in request.repositories:
+            repo_result = analyze_repository_data(github_url)
+            
+            recovery_analysis = analyze_recovery(repo_result)
 
-        health_score = calculate_health_score(
-            repo_result["repository_summary"],
-            None,
-            recovery_analysis
+            health_score = calculate_health_score(
+                repo_result["repository_summary"],
+                None,
+                recovery_analysis
+            )
+
+            health_metrics = calculate_health_metrics(
+                repo_result["repository_summary"],
+                recovery_analysis
+            )
+
+            comparison_results.append({
+                "repository": github_url,
+                "health_score": health_score,
+                "metrics": health_metrics,
+                "recovery_analysis": recovery_analysis
+            })
+
+        return {
+            "repositories": comparison_results
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Comparison failed: {str(e)}"
         )
-
-        health_metrics = calculate_health_metrics(
-            repo_result["repository_summary"],
-            recovery_analysis
-        )
-
-        comparison_results.append({
-            "repository": github_url,
-            "health_score": health_score,
-            "metrics": health_metrics,
-            "recovery_analysis": recovery_analysis
-        })
-
-    return {
-        "repositories": comparison_results
-    }
 
 @app.get("/analysis-history")
 def get_analysis_history(

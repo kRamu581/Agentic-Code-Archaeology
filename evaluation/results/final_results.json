@@ -1,0 +1,19 @@
+[
+  {
+    "test_id": "I-001",
+    "type": "intent",
+    "git_baseline": "Update auth.js",
+    "basic_llm": "Added user authentication logic.",
+    "agentic_system": "Implemented JWT-based authentication to resolve the session timeout bug (Issue #42).",
+    "expected": "Implemented JWT-based authentication to resolve the session timeout bug",
+    "agentic_correct": true
+  },
+  {
+    "test_id": "S-001",
+    "type": "scope",
+    "basic_llm": "No scope creep detected.",
+    "agentic_system": "Possible scope creep: modified 3 files in the payment gateway module unrelated to the auth ticket.",
+    "expected": "Scope creep in payment module",
+    "agentic_correct": true
+  }
+]
