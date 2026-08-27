@@ -1,0 +1,24 @@
+[
+  {
+    "test_id": "T01",
+    "feature": "Intent Analysis",
+    "repository": "Sample Repository",
+    "expected": "Intent report is generated",
+    "actual": "Intent report generated successfully",
+    "status": "PASS"
+  },
+  {
+    "test_id": "T02",
+    "feature": "Scope Detection",
+    "expected": "Detect unrelated file changes",
+    "actual": "Detected Payment.jsx as possible scope creep",
+    "status": "PASS"
+  },
+  {
+    "test_id": "T03",
+    "feature": "Project Recovery",
+    "expected": "Recommend a project to continue",
+    "actual": "Recovery recommendation generated",
+    "status": "PASS"
+  }
+]

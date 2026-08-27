@@ -1,0 +1,9 @@
+[
+  {
+    "repository": "project_01",
+    "status": "abandoned",
+    "possible_cause": "unfinished authentication and deployment",
+    "completion_level": "70%",
+    "recovery_recommendation": "CONTINUE"
+  }
+]

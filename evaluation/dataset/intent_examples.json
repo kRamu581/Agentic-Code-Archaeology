@@ -1,0 +1,68 @@
+[
+  {
+    "id": "intent_001",
+    "expected_intent": "Prevent login submission when the password is empty.",
+    "commit": {
+      "hash": "abc123",
+      "message": "Fix login validation",
+      "changed_files": [
+        "src/Login.jsx"
+      ]
+    },
+    "agent_state": {
+      "repository_summary": {},
+      "commit_history": [
+        {
+          "hash": "abc123",
+          "message": "Fix login validation",
+          "changed_files": [
+            "src/Login.jsx"
+          ],
+          "diff": []
+        }
+      ],
+      "file_histories": [],
+      "evidence_map": [],
+      "task_description": null,
+      "changed_files": null,
+      "intent_analysis": null,
+      "scope_analysis": null,
+      "recovery_analysis": null,
+      "final_report": null
+    }
+  },
+  {
+    "id": "intent_002",
+    "expected_intent": "Add authentication logic",
+    "commit": {
+      "hash": "def456",
+      "message": "Add user authentication",
+      "changed_files": [
+        "auth.js",
+        "login.jsx"
+      ]
+    },
+    "agent_state": {
+      "repository_summary": {},
+      "commit_history": [
+        {
+          "hash": "def456",
+          "message": "Add user authentication",
+          "changed_files": [
+            "auth.js",
+            "login.jsx"
+          ],
+          "diff": []
+        }
+      ],
+      "file_histories": [],
+      "evidence_map": [],
+      "task_description": null,
+      "changed_files": null,
+      "intent_analysis": null,
+      "scope_analysis": null,
+      "recovery_analysis": null,
+      "final_report": null
+    }
+  }
+]

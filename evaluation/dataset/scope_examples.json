@@ -1,0 +1,18 @@
+[
+  {
+    "id": "scope_001",
+    "task": "Fix login validation",
+    "changed_files": [
+      "Login.jsx",
+      "auth.js",
+      "Payment.jsx",
+      "Chatbot.jsx"
+    ],
+    "ground_truth": {
+      "Login.jsx": "IN_SCOPE",
+      "auth.js": "IN_SCOPE",
+      "Payment.jsx": "OUT_OF_SCOPE",
+      "Chatbot.jsx": "OUT_OF_SCOPE"
+    }
+  }
+]
