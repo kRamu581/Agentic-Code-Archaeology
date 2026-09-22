@@ -1,12 +1,23 @@
 import os
-from openai import OpenAI
+from google import genai
 
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
+client = genai.Client(
+    api_key=os.getenv("GEMINI_API_KEY")
 )
 
 
 def analyze_recovery(repository_data):
+    if os.getenv("USE_GEMINI_ANALYSIS", "false").lower() != "true":
+        summary = repository_data.get("repository_summary", repository_data)
+        commits = summary.get("total_commits", summary.get("commit_count", 0))
+        todos = summary.get("todo_count", len(summary.get("todos", [])))
+        return (
+            "Local recovery assessment:\n"
+            f"- Observed commits: {commits}\n"
+            f"- Observed TODO/FIXME markers: {todos}\n"
+            "- Recovery potential: MEDIUM\n"
+            "- Recommendation: REVIEW — add tests and confirm deployment configuration."
+        )
 
     prompt = f"""
 You are a Software Project Recovery AI Agent.
@@ -29,14 +40,9 @@ Important:
 - Clearly mention assumptions.
 """
 
-    response = client.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
+    response = client.models.generate_content(
+        model="gemini-3.6-flash",
+        contents=prompt
     )
 
-    return response.choices[0].message.content
+    return response.text

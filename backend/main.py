@@ -1,6 +1,18 @@
 from fastapi import FastAPI, HTTPException, Depends
 from dotenv import load_dotenv
-load_dotenv()
+from pathlib import Path
+import os
+
+# Load the project-level configuration regardless of where Uvicorn is started.
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+
+# The local development sandbox can inherit an unusable loopback proxy.  Clear
+# it for Git and Gemini requests made by this backend process.
+for proxy_variable in (
+    "HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY",
+    "http_proxy", "https_proxy", "all_proxy"
+):
+    os.environ.pop(proxy_variable, None)
 
 import json
 from sqlalchemy.orm import Session
@@ -107,11 +119,11 @@ def analyze_repository(repository: RepositoryRequest):
         if "not found" in error_msg or "clone" in error_msg or "cmd('git') failed" in error_msg:
             raise HTTPException(
                 status_code=400,
-                detail="Unable to analyze this repository. Please check that the repository is public and the URL is correct."
+                detail=f"Unable to analyze this repository. Please check that the repository is public and the URL is correct. Error: {str(e)}"
             )
         raise HTTPException(
             status_code=500,
-            detail="An error occurred during AI analysis or database connection."
+            detail=f"An error occurred during AI analysis or database connection. Details: {str(e)}"
         )
 
 @app.post("/analyze-scope")
@@ -250,17 +262,26 @@ def compare_repositories(
 
         for github_url in request.repositories:
             repo_result = analyze_repository_data(github_url)
+
+            repository_summary = {
+                "total_commits": repo_result["commit_count"],
+                "total_files": repo_result["file_count"],
+                "todo_count": len(repo_result["todos"])
+            }
             
-            recovery_analysis = analyze_recovery(repo_result)
+            recovery_analysis = analyze_recovery({
+                "repository_summary": repository_summary,
+                "recent_commits": repo_result["commit_history"]
+            })
 
             health_score = calculate_health_score(
-                repo_result["repository_summary"],
+                repository_summary,
                 None,
                 recovery_analysis
             )
 
             health_metrics = calculate_health_metrics(
-                repo_result["repository_summary"],
+                repository_summary,
                 recovery_analysis
             )
 

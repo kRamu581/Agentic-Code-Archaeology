@@ -1,7 +1,32 @@
 import os
-import shutil
 import re
+import tempfile
+import shutil
+import stat
+from contextlib import contextmanager
 from git import Repo
+
+
+@contextmanager
+def temporary_repository():
+    """Provide an isolated clone folder without failing on Windows file locks."""
+    repo_path = tempfile.mkdtemp(prefix="code_archaeology_")
+    try:
+        yield repo_path
+    finally:
+        def make_writable(func, path, _exc_info):
+            try:
+                os.chmod(path, stat.S_IWRITE)
+                func(path)
+            except OSError:
+                pass
+
+        try:
+            shutil.rmtree(repo_path, onerror=make_writable)
+        except OSError:
+            # A virus scanner or Git may transiently retain a handle. The
+            # unique folder is safe to clean up later without losing results.
+            pass
 
 def create_evidence_map(commit, file_histories):
     evidence = []
@@ -51,19 +76,22 @@ def create_evidence_map(commit, file_histories):
     return evidence
 
 def analyze_repository_data(github_url: str):
-    repo_path = "temp_repo"
-
-    def remove_readonly(func, path, excinfo):
-        import stat
-        os.chmod(path, stat.S_IWRITE)
-        func(path)
-
-    if os.path.exists(repo_path):
-        shutil.rmtree(repo_path, onerror=remove_readonly)
-
-    try:
+    # A unique temporary directory prevents concurrent requests from deleting
+    # each other's clone or a user-owned `temp_repo` directory.
+    with temporary_repository() as repo_path:
         # Clone repository
-        Repo.clone_from(github_url, repo_path)
+        # Explicitly clear inherited proxy variables. Development sandboxes can
+        # set them to an unavailable loopback proxy, which prevents Git from
+        # cloning public repositories.
+        clone_env = {
+            "HTTP_PROXY": "",
+            "HTTPS_PROXY": "",
+            "ALL_PROXY": "",
+            "http_proxy": "",
+            "https_proxy": "",
+            "all_proxy": ""
+        }
+        Repo.clone_from(github_url, repo_path, env=clone_env)
         repo = Repo(repo_path)
 
         def get_file_history(repo, file_path):
@@ -177,10 +205,3 @@ def analyze_repository_data(github_url: str):
             "file_count": file_count,
             "todos": todos
         }
-
-    finally:
-        if os.path.exists(repo_path):
-            try:
-                shutil.rmtree(repo_path, onerror=remove_readonly)
-            except Exception:
-                pass

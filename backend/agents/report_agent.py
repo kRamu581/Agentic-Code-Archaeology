@@ -1,8 +1,8 @@
 import os
-from openai import OpenAI
+from google import genai
 
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
+client = genai.Client(
+    api_key=os.getenv("GEMINI_API_KEY")
 )
 
 
@@ -12,6 +12,16 @@ def generate_final_report(
     scope_analysis,
     recovery_analysis
 ):
+    if os.getenv("USE_GEMINI_ANALYSIS", "false").lower() != "true":
+        return (
+            "Overall repository condition: Review recommended.\n\n"
+            f"Repository summary: {repository_summary}\n\n"
+            f"Intent findings: {intent_analysis}\n\n"
+            f"Scope findings: {scope_analysis}\n\n"
+            f"Recovery findings: {recovery_analysis}\n\n"
+            "Next action: add automated tests and configure a valid Gemini key only "
+            "when AI-enhanced analysis is required."
+        )
 
     prompt = f"""
 You are the Final Decision Agent in an Agentic
@@ -43,14 +53,9 @@ Be evidence-based. Do not invent facts.
 If evidence is insufficient, clearly mention it.
 """
 
-    response = client.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
+    response = client.models.generate_content(
+        model="gemini-3.6-flash",
+        contents=prompt
     )
 
-    return response.choices[0].message.content
+    return response.text

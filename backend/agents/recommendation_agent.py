@@ -1,11 +1,18 @@
 import os
-from openai import OpenAI
+from google import genai
 
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
+client = genai.Client(
+    api_key=os.getenv("GEMINI_API_KEY")
 )
 
 def recommend_project(projects):
+    if os.getenv("USE_GEMINI_ANALYSIS", "false").lower() != "true":
+        if not projects:
+            return "No projects were provided."
+        return (
+            "Local recommendation: prioritize the highest-ranked project from "
+            "the calculated health scores. Enable Gemini for narrative reasoning."
+        )
     prompt = f"""
 You are a Software Project Recovery Agent.
 
@@ -35,14 +42,9 @@ Base conclusions only on the provided evidence.
 Do not invent missing project details.
 """
 
-    response = client.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
+    response = client.models.generate_content(
+        model="gemini-3.6-flash",
+        contents=prompt
     )
 
-    return response.choices[0].message.content
+    return response.text

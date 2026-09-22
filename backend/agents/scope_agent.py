@@ -1,12 +1,19 @@
 import os
-from openai import OpenAI
+from google import genai
 
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
+client = genai.Client(
+    api_key=os.getenv("GEMINI_API_KEY")
 )
 
 
 def analyze_scope(task_description, changed_files):
+    if os.getenv("USE_GEMINI_ANALYSIS", "false").lower() != "true":
+        return (
+            "Verdict: INSUFFICIENT_EVIDENCE\n"
+            f"Requested task: {task_description}\n"
+            f"Changed files: {', '.join(changed_files)}\n"
+            "Local analysis cannot determine semantic relevance; enable Gemini for an AI review."
+        )
 
     prompt = f"""
 You are a Software Scope Creep Detection AI Agent.
@@ -32,14 +39,9 @@ Do not invent information.
 If there is insufficient evidence, say so clearly.
 """
 
-    response = client.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
+    response = client.models.generate_content(
+        model="gemini-3.6-flash",
+        contents=prompt
     )
 
-    return response.choices[0].message.content
+    return response.text

@@ -1,8 +1,8 @@
-from openai import OpenAI
+from google import genai
 import os
 
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
+client = genai.Client(
+    api_key=os.getenv("GEMINI_API_KEY")
 )
 
 def llm_baseline(commit):
@@ -19,21 +19,19 @@ Commit message:
 Changed files:
 {commit.get("changed_files")}
 
+Actual code diff:
+{commit.get("diff", [])}
+
 Give a short answer.
 """
 
     try:
-        response = client.chat.completions.create(
-            model="gpt-4.1-mini",
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ]
+        response = client.models.generate_content(
+            model="gemini-3.6-flash",
+            contents=prompt
         )
         return {
-            "prediction": response.choices[0].message.content,
+            "prediction": response.text,
             "method": "Basic LLM"
         }
     except Exception as e:

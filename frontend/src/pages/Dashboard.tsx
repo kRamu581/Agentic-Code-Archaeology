@@ -20,7 +20,7 @@ function Dashboard() {
 
   const handleProjectRecommendation = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/recommend-project", {
+      const response = await axios.post("/api/recommend-project", {
         projects: [
           {
             "name": "Campus Asset Management",
@@ -51,7 +51,7 @@ function Dashboard() {
 
   const fetchRepositories = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/github/repositories");
+      const response = await axios.get("/api/github/repositories");
       setRepositories(response.data);
       setShowRepos(true);
     } catch (error) {
@@ -76,16 +76,24 @@ function Dashboard() {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/full-analysis",
+        "/api/full-analysis",
         {
           github_url: githubUrl
+        },
+        {
+          // Avoid a permanently disabled button when an AI provider is slow
+          // or unavailable.
+          timeout: 60000
         }
       );
 
       setResult(response.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert("Error analyzing repository");
+      const detail = error.code === "ECONNABORTED"
+        ? "Analysis timed out. Check the AI provider key/model and try again."
+        : error.response?.data?.detail || "Error analyzing repository";
+      alert(detail);
     } finally {
       setLoading(false);
     }
