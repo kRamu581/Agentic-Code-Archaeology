@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-09-22T17:13:38.613295+00:00",
+  "repositories": [
+    {
+      "id": "aicar",
+      "source": "https://github.com/kRamu581/Agentic-Code-Archaeology",
+      "path": "../..",
+      "revision": "07b121617c2a064e5e16c43db73a4ee852de864c"
+    }
+  ]
+}

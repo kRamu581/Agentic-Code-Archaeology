@@ -1,21 +1,17 @@
-import sys
-import os
+"""Evaluate the existing agents with a reproducible evidence audit."""
+from backend.agents.intent_agent import analyze_intent
+from backend.agents.scope_agent import analyze_scope
+from backend.agents.recovery_agent import analyze_recovery
+from backend.services.evidence_verifier import audit
 
-# Add backend to path so we can import graph
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from graph.workflow import agent_workflow
-
-def agentic_system(state):
-    try:
-        result = agent_workflow.invoke(state)
-
-        return {
-            "prediction": result.get("intent_analysis"),
-            "method": "Agentic Code Archaeology"
-        }
-    except Exception as e:
-        return {
-            "prediction": str(e),
-            "method": "Agentic Code Archaeology"
-        }
+def predict(task, pack, live=False):
+    kwargs = {"evidence_pack": pack, "live": live}
+    if task == "intent":
+        result = analyze_intent(pack["commit"], pack["file_histories"], pack["hunks"], **kwargs)
+    elif task == "scope":
+        result = analyze_scope(pack["task"], pack["commit"]["changed_files"], **kwargs)
+    else:
+        result = analyze_recovery(pack["features"], **kwargs)
+    result["evidence_audit"] = audit(result, pack)
+    return result

@@ -1,14 +1,22 @@
 import os
 import json
-from google import genai
-from google.genai import types
 
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+try:
+    from backend.services.llm import generate
+except ModuleNotFoundError:
+    from services.llm import generate
 
 
-def analyze_intent(commit, file_histories, evidence_map):
+def analyze_intent(commit, file_histories, evidence_map, *, evidence_pack=None, live=False):
+    if evidence_pack is not None:
+        if live:
+            from backend.services.llm import structured_prediction
+            return structured_prediction("intent", evidence_pack, specialized=True)
+        message = commit.get("message", "")
+        return {"intent": message, "introducing_commit": None, "confidence": "LOW",
+                "analysis_mode": "local fallback; introducing region not inferred",
+                "claims": [{"text": message, "quote": message, "kind": "quote",
+                            "commit": commit["hash"], "file": None, "hunk": None}]}
     if os.getenv("USE_GEMINI_ANALYSIS", "false").lower() != "true":
         changed_files = commit.get("changed_files", [])
         return {
@@ -77,12 +85,4 @@ Rules:
 - If evidence is weak, use LOW confidence.
 """
 
-    response = client.models.generate_content(
-        model="gemini-3.6-flash",
-        contents=prompt,
-        config=types.GenerateContentConfig(
-            response_mime_type="application/json"
-        )
-    )
-
-    return json.loads(response.text)
+    return generate(prompt, structured=True)

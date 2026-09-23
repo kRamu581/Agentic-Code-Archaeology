@@ -1,12 +1,19 @@
 import os
-from google import genai
 
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+try:
+    from backend.services.llm import generate
+except ModuleNotFoundError:
+    from services.llm import generate
 
 
-def analyze_scope(task_description, changed_files):
+def analyze_scope(task_description, changed_files, *, evidence_pack=None, live=False):
+    if evidence_pack is not None:
+        if live:
+            from backend.services.llm import structured_prediction
+            return structured_prediction("scope", evidence_pack, specialized=True)
+        return {"hunks": {h["id"]: "unclear" for h in evidence_pack["hunks"]},
+                "verdict": "justify", "confidence": "LOW", "claims": [],
+                "analysis_mode": "local abstention; semantic scope requires review"}
     if os.getenv("USE_GEMINI_ANALYSIS", "false").lower() != "true":
         return (
             "Verdict: INSUFFICIENT_EVIDENCE\n"
@@ -39,9 +46,4 @@ Do not invent information.
 If there is insufficient evidence, say so clearly.
 """
 
-    response = client.models.generate_content(
-        model="gemini-3.6-flash",
-        contents=prompt
-    )
-
-    return response.text
+    return generate(prompt)

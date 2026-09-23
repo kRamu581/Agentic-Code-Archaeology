@@ -1,0 +1,59 @@
+[
+  {
+    "repository": "aicar",
+    "revision": "07b121617c2a064e5e16c43db73a4ee852de864c",
+    "annotation": {
+      "status": "pending",
+      "annotator": null,
+      "rationale": null
+    },
+    "case_id": "aicar_intent_07b121617c2a",
+    "file": "backend/agents/intent_agent.py",
+    "region": [
+      1,
+      30
+    ],
+    "gold_intent": null,
+    "accepted_intents": [],
+    "introducing_commit": null,
+    "supporting_commits": []
+  },
+  {
+    "repository": "aicar",
+    "revision": "df3ad517cd35b3608ac2fe01de16b5dabc172221",
+    "annotation": {
+      "status": "pending",
+      "annotator": null,
+      "rationale": null
+    },
+    "case_id": "aicar_intent_df3ad517cd35",
+    "file": "backend/main.py",
+    "region": [
+      1,
+      30
+    ],
+    "gold_intent": null,
+    "accepted_intents": [],
+    "introducing_commit": null,
+    "supporting_commits": []
+  },
+  {
+    "repository": "aicar",
+    "revision": "1e253587774cc4063533fe62311f2c7d2a9816a3",
+    "annotation": {
+      "status": "pending",
+      "annotator": null,
+      "rationale": null
+    },
+    "case_id": "aicar_intent_1e253587774c",
+    "file": "backend/agents/intent_agent.py",
+    "region": [
+      1,
+      30
+    ],
+    "gold_intent": null,
+    "accepted_intents": [],
+    "introducing_commit": null,
+    "supporting_commits": []
+  }
+]

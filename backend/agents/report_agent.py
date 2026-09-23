@@ -1,9 +1,9 @@
 import os
-from google import genai
 
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+try:
+    from backend.services.llm import generate
+except ModuleNotFoundError:
+    from services.llm import generate
 
 
 def generate_final_report(
@@ -53,9 +53,4 @@ Be evidence-based. Do not invent facts.
 If evidence is insufficient, clearly mention it.
 """
 
-    response = client.models.generate_content(
-        model="gemini-3.6-flash",
-        contents=prompt
-    )
-
-    return response.text
+    return generate(prompt)

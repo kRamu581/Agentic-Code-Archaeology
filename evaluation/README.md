@@ -1,11 +1,26 @@
-# Evaluation Framework
+# Reproducible evaluation
 
-This directory contains the dataset and results for testing the Agentic Code Archaeology system.
+Start with [ANNOTATION_GUIDE.md](ANNOTATION_GUIDE.md). The active dataset is
+`datasets/`, not the legacy illustrative `dataset/` directory.
 
-## Datasets
-* `dataset/intent_examples.json`: Ground truth for commit intent reconstruction.
-* `dataset/scope_examples.json`: Ground truth for scope creep detection.
-* `dataset/recovery_examples.json`: Ground truth for abandoned project recovery analysis.
+```powershell
+python -m pip install -r evaluation/requirements.txt
+python -m pytest -q
+python evaluation/runners/run_all.py --smoke
+```
 
-## Results
-* `results/`: Directory to store the output JSONs from baseline and agentic comparisons.
+The default runner (without `--smoke`) fails on missing human labels. Smoke mode
+runs real Git evidence without scoring accuracy. `--live` explicitly enables
+Gemini with GEMINI_API_KEY and GEMINI_MODEL in the process environment.
+
+Methods reuse `backend/evaluation/baselines/` and the existing application agents.
+Outputs contain immutable per-run raw evidence/predictions, timing CSV, processed
+metrics, final JSON/CSV and a Markdown report. Figures are drawn only for measured
+values; absent metrics receive a reason in the figures manifest, never a zero bar.
+
+`research_paper_draft.md` and `fyp_report_draft.md` are unchanged. Their numbers,
+`dataset/*_examples.json`, `results/final_metrics.json`, manual PASS checklists and
+`results/phase3_test_results.json` are **legacy unverified material**, excluded
+from every experiment. The previous `results/final_results.json` is preserved at
+`results/legacy_unverified/final_results.json`. Only schema-versioned new run
+artifacts represent execution of this evaluator.

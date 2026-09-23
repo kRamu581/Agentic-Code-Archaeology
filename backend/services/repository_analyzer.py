@@ -75,7 +75,10 @@ def create_evidence_map(commit, file_histories):
 
     return evidence
 
-def analyze_repository_data(github_url: str):
+def analyze_repository_data(github_url: str, *, revision=None, file=None, region=None, as_of=None):
+    if revision is not None:
+        from backend.services.git_evidence import snapshot
+        return snapshot(github_url, revision, file=file, region=region, as_of=as_of)
     # A unique temporary directory prevents concurrent requests from deleting
     # each other's clone or a user-owned `temp_repo` directory.
     with temporary_repository() as repo_path:

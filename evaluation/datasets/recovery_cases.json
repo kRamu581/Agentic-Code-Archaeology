@@ -1,0 +1,15 @@
+[
+  {
+    "case_id": "aicar_recovery",
+    "repository": "aicar",
+    "revision": "07b121617c2a064e5e16c43db73a4ee852de864c",
+    "unfinished": null,
+    "gold_rank": null,
+    "gold_recoverability": null,
+    "annotation": {
+      "status": "pending",
+      "annotator": null,
+      "rationale": null
+    }
+  }
+]

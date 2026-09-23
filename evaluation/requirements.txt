@@ -1,0 +1,6 @@
+# Offline evaluation uses Git CLI, GitPython and the Python standard library.
+GitPython==3.1.45
+pytest==8.4.2
+matplotlib==3.10.6
+# Live Gemini runs additionally require google-genai; record its installed version
+# in each run manifest. The provider SDK is intentionally not needed offline.

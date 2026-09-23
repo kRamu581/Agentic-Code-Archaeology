@@ -1,12 +1,18 @@
 import os
-from google import genai
 
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+try:
+    from backend.services.llm import generate
+except ModuleNotFoundError:
+    from services.llm import generate
 
 
-def analyze_recovery(repository_data):
+def analyze_recovery(repository_data, *, evidence_pack=None, live=False):
+    if evidence_pack is not None:
+        if live:
+            from backend.services.llm import structured_prediction
+            return structured_prediction("recovery", evidence_pack, specialized=True)
+        return {"score": None, "confidence": "LOW", "claims": [],
+                "analysis_mode": "local abstention; current recovery agent has no calibrated numeric ranking"}
     if os.getenv("USE_GEMINI_ANALYSIS", "false").lower() != "true":
         summary = repository_data.get("repository_summary", repository_data)
         commits = summary.get("total_commits", summary.get("commit_count", 0))
@@ -40,9 +46,4 @@ Important:
 - Clearly mention assumptions.
 """
 
-    response = client.models.generate_content(
-        model="gemini-3.6-flash",
-        contents=prompt
-    )
-
-    return response.text
+    return generate(prompt)

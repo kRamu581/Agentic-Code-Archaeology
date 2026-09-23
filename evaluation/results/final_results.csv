@@ -1,0 +1,5 @@
+Method,Intent Accuracy,Evidence Support,Scope F1,Recovery nDCG
+Git baseline,N/A — insufficient ground truth,N/A — insufficient ground truth,N/A — insufficient ground truth,N/A — insufficient ground truth
+Git log/blame script,N/A — insufficient ground truth,N/A — insufficient ground truth,N/A — insufficient ground truth,N/A — insufficient ground truth
+Single-prompt LLM,N/A — insufficient ground truth,N/A — insufficient ground truth,N/A — insufficient ground truth,N/A — insufficient ground truth
+Proposed AICAR,N/A — insufficient ground truth,N/A — insufficient ground truth,N/A — insufficient ground truth,N/A — insufficient ground truth

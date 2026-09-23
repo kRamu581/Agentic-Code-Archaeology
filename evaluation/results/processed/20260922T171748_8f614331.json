@@ -1,0 +1,166 @@
+{
+  "git": {
+    "name": "Git baseline",
+    "task_status": {
+      "intent": "unscored smoke",
+      "scope": "unscored smoke",
+      "recovery": "unscored smoke"
+    },
+    "intent": {
+      "accuracy": null,
+      "cases": 0,
+      "correct": 0,
+      "incorrect": 0,
+      "introducing_commit_accuracy": null
+    },
+    "scope": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "gold_unclear_excluded": 0,
+      "predicted_unclear": 0,
+      "decision_accuracy": null,
+      "cases": 0
+    },
+    "recovery": {
+      "ndcg": null,
+      "repositories": 0,
+      "predicted_ranking": [],
+      "ground_truth_ranking": []
+    },
+    "evidence": {
+      "supported": 0,
+      "total_verifiable": 0,
+      "rate": null
+    },
+    "analysis_seconds": 0.004516599961789325,
+    "executed": 7,
+    "mode": "offline"
+  },
+  "git_script": {
+    "name": "Git log/blame script",
+    "task_status": {
+      "intent": "unscored smoke",
+      "scope": "unscored smoke",
+      "recovery": "unscored smoke"
+    },
+    "intent": {
+      "accuracy": null,
+      "cases": 0,
+      "correct": 0,
+      "incorrect": 0,
+      "introducing_commit_accuracy": null
+    },
+    "scope": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "gold_unclear_excluded": 0,
+      "predicted_unclear": 0,
+      "decision_accuracy": null,
+      "cases": 0
+    },
+    "recovery": {
+      "ndcg": null,
+      "repositories": 0,
+      "predicted_ranking": [],
+      "ground_truth_ranking": []
+    },
+    "evidence": {
+      "supported": 0,
+      "total_verifiable": 0,
+      "rate": null
+    },
+    "analysis_seconds": 0.004950900009134784,
+    "executed": 7,
+    "mode": "offline"
+  },
+  "llm": {
+    "name": "Single-prompt LLM",
+    "task_status": {
+      "intent": "unscored smoke",
+      "scope": "unscored smoke",
+      "recovery": "unscored smoke"
+    },
+    "intent": {
+      "accuracy": null,
+      "cases": 0,
+      "correct": 0,
+      "incorrect": 0,
+      "introducing_commit_accuracy": null
+    },
+    "scope": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "gold_unclear_excluded": 0,
+      "predicted_unclear": 0,
+      "decision_accuracy": null,
+      "cases": 0
+    },
+    "recovery": {
+      "ndcg": null,
+      "repositories": 0,
+      "predicted_ranking": [],
+      "ground_truth_ranking": []
+    },
+    "evidence": {
+      "supported": 0,
+      "total_verifiable": 0,
+      "rate": null
+    },
+    "analysis_seconds": 0,
+    "executed": 0,
+    "mode": "offline"
+  },
+  "aicar": {
+    "name": "Proposed AICAR",
+    "task_status": {
+      "intent": "unscored smoke",
+      "scope": "unscored smoke",
+      "recovery": "unscored smoke"
+    },
+    "intent": {
+      "accuracy": null,
+      "cases": 0,
+      "correct": 0,
+      "incorrect": 0,
+      "introducing_commit_accuracy": null
+    },
+    "scope": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "gold_unclear_excluded": 0,
+      "predicted_unclear": 0,
+      "decision_accuracy": null,
+      "cases": 0
+    },
+    "recovery": {
+      "ndcg": null,
+      "repositories": 0,
+      "predicted_ranking": [],
+      "ground_truth_ranking": []
+    },
+    "evidence": {
+      "supported": 0,
+      "total_verifiable": 0,
+      "rate": null
+    },
+    "analysis_seconds": 0.0044995000353083014,
+    "executed": 7,
+    "mode": "offline"
+  }
+}

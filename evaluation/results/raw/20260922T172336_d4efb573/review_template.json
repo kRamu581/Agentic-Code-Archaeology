@@ -1,0 +1,317 @@
+[
+  {
+    "case_id": "aicar_intent_07b121617c2a",
+    "method": "git",
+    "prediction_sha256": "8aa647d260bacdd67a0b3c0c24495c70225390bcf6fad056062aabcaf7a30585",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "chore: migrate agents to Gemini, update frontend error handling, and fix API bugs",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_intent_07b121617c2a",
+    "method": "git_script",
+    "prediction_sha256": "7a41979786c8fe781e312560646094e46384f0c5116764c7542a3a9512412e17",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "chore: migrate agents to Gemini, update frontend error handling, and fix API bugs",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_intent_07b121617c2a",
+    "method": "aicar",
+    "prediction_sha256": "e78f43fb80b62a216d7c2bcd74247409cdf89533f63d79794b15854303e28271",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "chore: migrate agents to Gemini, update frontend error handling, and fix API bugs",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_intent_df3ad517cd35",
+    "method": "git",
+    "prediction_sha256": "58d92fae0ead5932c50cd0f0b17d5333c3e2c25dea2ff6741d0aa9980eab733e",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Step 38: Generate initial research paper draft",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_intent_df3ad517cd35",
+    "method": "git_script",
+    "prediction_sha256": "0611a133447ccb4c4121a030567633a5267a41fcea8f5385e17d3385395e5303",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Initial commit: Agentic Code Archaeology",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_intent_df3ad517cd35",
+    "method": "aicar",
+    "prediction_sha256": "2cbc07650494a6f1e444a2be9cf6a67e19ba52b44d7f70c2ab99de797914fd42",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Step 38: Generate initial research paper draft",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_intent_1e253587774c",
+    "method": "git",
+    "prediction_sha256": "882061023554e22c80fc56164220c12650d382682bbb840a613bf833a8e0fcae",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Initial commit: Agentic Code Archaeology",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_intent_1e253587774c",
+    "method": "git_script",
+    "prediction_sha256": "aff8de51a6370f10dbc55d89e4daa743f248ad2bd1c81dcfe3a01ae3158d3e3e",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Initial commit: Agentic Code Archaeology",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_intent_1e253587774c",
+    "method": "aicar",
+    "prediction_sha256": "0aa813098e907bd8e04099f99dc5b24c69eda3985865eae32a7610a2c953323a",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Initial commit: Agentic Code Archaeology",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_scope_07b121617c2a",
+    "method": "git",
+    "prediction_sha256": "0f1f97dcb3da80f7775a7fcbb186eb3c67a379e767e0f89638c3c9e98dbd8a92",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Uncited classification/ranking",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_scope_07b121617c2a",
+    "method": "git_script",
+    "prediction_sha256": "cb1c721d71039b72aecffe4648c5cf0f0da03a4c7619fb53328839dc28a3e640",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Uncited classification/ranking",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_scope_07b121617c2a",
+    "method": "aicar",
+    "prediction_sha256": "c99a2d7268b2f993aae6f9bfae68dca68cad21579e82111aad90abc2f23856f4",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Uncited classification/ranking",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_scope_df3ad517cd35",
+    "method": "git",
+    "prediction_sha256": "93c5298dd258e35e70b721f4a28d45149ae4bf4806a0bf39cec390bfe7c4c45f",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Uncited classification/ranking",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_scope_df3ad517cd35",
+    "method": "git_script",
+    "prediction_sha256": "fd2474796bb03fdf105df17aa4ba0b6959b44c065bf96618b1807134a7dcb9f5",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Uncited classification/ranking",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_scope_df3ad517cd35",
+    "method": "aicar",
+    "prediction_sha256": "e61509483d35618d172f98afc981112d89b10e1af819a6b1b2e501e2b07e1a45",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Uncited classification/ranking",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_scope_1e253587774c",
+    "method": "git",
+    "prediction_sha256": "bbbb69e57b66db3e4f73c7a4e7613cde32043dd70b97b09c387e40c1ed769ec6",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Uncited classification/ranking",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_scope_1e253587774c",
+    "method": "git_script",
+    "prediction_sha256": "5aac93883eab0a4dec6223f69fc7ce1baeefbe43445046c26cd77ac157e32e5f",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Uncited classification/ranking",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_scope_1e253587774c",
+    "method": "aicar",
+    "prediction_sha256": "cf92c05c2d1597845b9104fb2cc2304454ac3255704959602c4f88aa3ccb16ba",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Uncited classification/ranking",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_recovery",
+    "method": "git",
+    "prediction_sha256": "22f21a02239b14b36b49738e00e1e0e8a0af1c278704413336795c297f3fe3c5",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Uncited classification/ranking",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_recovery",
+    "method": "git_script",
+    "prediction_sha256": "91062b229cace954204d51c4fed0e9bee2b697849aef1014abba94b6aaeecebf",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Uncited classification/ranking",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  },
+  {
+    "case_id": "aicar_recovery",
+    "method": "aicar",
+    "prediction_sha256": "4708556ee69affb4f11fa1858c0a78a1ac83173eb95d668276fdb3a2fa950863",
+    "intent_correct": null,
+    "annotator": null,
+    "rationale": null,
+    "claims": [
+      {
+        "text": "Uncited classification/ranking",
+        "supported": null,
+        "rationale": null
+      }
+    ]
+  }
+]

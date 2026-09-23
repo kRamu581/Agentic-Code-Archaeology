@@ -1,0 +1,261 @@
+{
+  "schema_version": 1,
+  "run_id": "20260922T172449_3f6dec5e",
+  "status": "unscored_smoke",
+  "start_time": "2026-09-22T17:24:25.641257+00:00",
+  "end_time": "2026-09-22T17:24:49.837577+00:00",
+  "total_seconds": 24.196332799998345,
+  "preparation_seconds": 23.962018799997168,
+  "timing_scope": "validation/extraction plus method execution; shared extraction is measured separately, report/plot generation excluded",
+  "dataset": {
+    "intent": 3,
+    "scope": 3,
+    "recovery": 1,
+    "repositories": 1,
+    "commits": 4,
+    "labelled": 0,
+    "pending": 7
+  },
+  "targets_not_observed": {
+    "repositories": 25,
+    "intent": 40,
+    "scope": 30,
+    "recovery": 20,
+    "commits_approximate": 1800
+  },
+  "attempts": 28,
+  "executed": 21,
+  "successful": 21,
+  "errors": 0,
+  "skipped": 7,
+  "scored_cases": 0,
+  "methods": {
+    "git": {
+      "name": "Git baseline",
+      "task_status": {
+        "intent": "unscored smoke",
+        "scope": "unscored smoke",
+        "recovery": "unscored smoke"
+      },
+      "intent": {
+        "accuracy": null,
+        "cases": 0,
+        "correct": 0,
+        "incorrect": 0,
+        "introducing_commit_accuracy": null
+      },
+      "scope": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "f1": null,
+        "gold_unclear_excluded": 0,
+        "predicted_unclear": 0,
+        "decision_accuracy": null,
+        "cases": 0
+      },
+      "recovery": {
+        "ndcg": null,
+        "repositories": 0,
+        "predicted_ranking": [],
+        "ground_truth_ranking": []
+      },
+      "evidence": {
+        "supported": 0,
+        "total_verifiable": 0,
+        "rate": null
+      },
+      "analysis_seconds": 0.004227999976137653,
+      "executed": 7,
+      "mode": "offline"
+    },
+    "git_script": {
+      "name": "Git log/blame script",
+      "task_status": {
+        "intent": "unscored smoke",
+        "scope": "unscored smoke",
+        "recovery": "unscored smoke"
+      },
+      "intent": {
+        "accuracy": null,
+        "cases": 0,
+        "correct": 0,
+        "incorrect": 0,
+        "introducing_commit_accuracy": null
+      },
+      "scope": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "f1": null,
+        "gold_unclear_excluded": 0,
+        "predicted_unclear": 0,
+        "decision_accuracy": null,
+        "cases": 0
+      },
+      "recovery": {
+        "ndcg": null,
+        "repositories": 0,
+        "predicted_ranking": [],
+        "ground_truth_ranking": []
+      },
+      "evidence": {
+        "supported": 0,
+        "total_verifiable": 0,
+        "rate": null
+      },
+      "analysis_seconds": 0.0032937999931164086,
+      "executed": 7,
+      "mode": "offline"
+    },
+    "llm": {
+      "name": "Single-prompt LLM",
+      "task_status": {
+        "intent": "unscored smoke",
+        "scope": "unscored smoke",
+        "recovery": "unscored smoke"
+      },
+      "intent": {
+        "accuracy": null,
+        "cases": 0,
+        "correct": 0,
+        "incorrect": 0,
+        "introducing_commit_accuracy": null
+      },
+      "scope": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "f1": null,
+        "gold_unclear_excluded": 0,
+        "predicted_unclear": 0,
+        "decision_accuracy": null,
+        "cases": 0
+      },
+      "recovery": {
+        "ndcg": null,
+        "repositories": 0,
+        "predicted_ranking": [],
+        "ground_truth_ranking": []
+      },
+      "evidence": {
+        "supported": 0,
+        "total_verifiable": 0,
+        "rate": null
+      },
+      "analysis_seconds": null,
+      "executed": 0,
+      "mode": "offline"
+    },
+    "aicar": {
+      "name": "Proposed AICAR",
+      "task_status": {
+        "intent": "unscored smoke",
+        "scope": "unscored smoke",
+        "recovery": "unscored smoke"
+      },
+      "intent": {
+        "accuracy": null,
+        "cases": 0,
+        "correct": 0,
+        "incorrect": 0,
+        "introducing_commit_accuracy": null
+      },
+      "scope": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "f1": null,
+        "gold_unclear_excluded": 0,
+        "predicted_unclear": 0,
+        "decision_accuracy": null,
+        "cases": 0
+      },
+      "recovery": {
+        "ndcg": null,
+        "repositories": 0,
+        "predicted_ranking": [],
+        "ground_truth_ranking": []
+      },
+      "evidence": {
+        "supported": 0,
+        "total_verifiable": 0,
+        "rate": null
+      },
+      "analysis_seconds": 0.0037001999735366553,
+      "executed": 7,
+      "mode": "offline"
+    }
+  },
+  "provenance": {
+    "python": "3.13.9",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "GitPython": "3.1.45",
+      "google-genai": null,
+      "pytest": "8.4.2",
+      "matplotlib": "3.10.6"
+    },
+    "git_version": "git version 2.51.1.windows.1",
+    "code_revision": "07b121617c2a064e5e16c43db73a4ee852de864c",
+    "code_sha256": {
+      "backend\\agents\\__init__.py": "36bc28b1cfbd5c41e828ecb6e9ac563d9c98f19490cb8f57ac9bc326f58addec",
+      "backend\\agents\\intent_agent.py": "cadd7a432d16250d77a661a62a804210af95daa0bf8067327cc47090e6a91777",
+      "backend\\agents\\recommendation_agent.py": "3576574de49462d8dfefe19e3882b6562afe58ddb626530d0e2e8c137564ae76",
+      "backend\\agents\\recovery_agent.py": "c1b4246960ad8c6a9bef8c5b3c2e5bcc2bf8f5b9705a16d39323be21de4c994e",
+      "backend\\agents\\report_agent.py": "67ede0d4054086c54fcb7227ccec7434809a715500321393e83f6657ae1d0c1f",
+      "backend\\agents\\scope_agent.py": "e3ed519ca3ddc52389415028982c3a9c2145efdba970791d7d27c0dc3c9e4dc1",
+      "backend\\database.py": "531cc95412c69dbddc1d75c1bc596116deb285e74d66649b160fcef889d7fcbf",
+      "backend\\evaluation\\baselines\\__init__.py": "74ffbbd35e7e956ee34584aaf55d466a693a20147f400a4ec3528c0af8bb59c1",
+      "backend\\evaluation\\baselines\\agentic_system.py": "3a1072639533009293500c713e4dad85b2aa70ac1b46f92e6b9cfecc92b6bce9",
+      "backend\\evaluation\\baselines\\git_baseline.py": "591bdd8bc653505b06061f68760ad7d970d04531a09bd0785969eb3b6b707660",
+      "backend\\evaluation\\baselines\\git_script_baseline.py": "220e5dd4c78b420a77ffe6d46db1e5adb36c4b86ded6eb0ed1a2ec977386d57c",
+      "backend\\evaluation\\baselines\\llm_baseline.py": "3c379eceb79ac2b2d894d02c8437a81417c14bf06c0e1bd90bc90001131170be",
+      "backend\\evaluation\\generate_report.py": "279a75cb7b317dd026be058791767acac3e028e968b6afa3a5aa5a4f3330d6ea",
+      "backend\\evaluation\\metrics.py": "a8f2761dfa0b571c6a4e7096854d50fb06c9c983f9b4aff70347acb5dd37a430",
+      "backend\\evaluation\\run_evaluation.py": "6905cc057e1f1d73ed09dd6b0e456e3af9bed49b3ecfe7e25bea472e51465c04",
+      "backend\\graph\\__init__.py": "36bc28b1cfbd5c41e828ecb6e9ac563d9c98f19490cb8f57ac9bc326f58addec",
+      "backend\\graph\\workflow.py": "660d416f26c51af6b86fe0118c3cfc5bc5a73ada109dd19f51fee72b513e0f59",
+      "backend\\main.py": "5cdc599cf697a833eed0b5c2f73cecc0fd30af5bc88d230b6bfa000f5e77dfe1",
+      "backend\\models\\__init__.py": "36bc28b1cfbd5c41e828ecb6e9ac563d9c98f19490cb8f57ac9bc326f58addec",
+      "backend\\models\\analysis.py": "f03654f1d0709a4900b4bcdfbd183a0b9d8f00b5d4c233debf604ade75b92bab",
+      "backend\\models\\requests.py": "2ba3b14a4dd31a2ef2326846019cf05ad363b8f8433a0e537e5acb1fde9e729f",
+      "backend\\services\\__init__.py": "36bc28b1cfbd5c41e828ecb6e9ac563d9c98f19490cb8f57ac9bc326f58addec",
+      "backend\\services\\evidence_verifier.py": "00963a80e20603c5fb3e480d007513a787febfdce6e0a6895e422500a3bb6133",
+      "backend\\services\\git_evidence.py": "276fcf36c5cf2113f456f8df6c9d31c7b9cf48034c89267aad2fdcda034832fe",
+      "backend\\services\\health_score.py": "97374f83fd2ff5aa77b9e7f7f3683c1e93a1982f5fc9d31a7e15f1887be4ec92",
+      "backend\\services\\llm.py": "d0e2a3b17cf39ff23d32e1e3b13fbd8c45b1975a7c420e3e42ed9bad9958ca8e",
+      "backend\\services\\project_recommender.py": "1170d4e0bc10ae2160e84e60813dcf9ecbeb04fa91093dfe8e18dbf305007f94",
+      "backend\\services\\repository_analyzer.py": "24e0acd1b47c1188d898b03bc2ea4397710e618d011c2a235f353ee262e04353",
+      "backend\\services\\repository_graph.py": "cb427a2569d6bed4dced5af05a5c42ddffb6587f1dbeda9911530ff99ba66fad",
+      "evaluation\\__init__.py": "1fa5c42839de66873cfc13e829cba064308ab733a65462750f4ba12d0868d4f8",
+      "evaluation\\dataset.py": "7629ee23dda63e7fd68748767c960d8fce37982ec13a7816d915106c46523e63",
+      "evaluation\\figures.py": "bb91db667bcc3ce8918ee595a1360e26c6e515498db7778bee793dfbfdb9efc1",
+      "evaluation\\metrics.py": "caec1110b16be8b9c8a212c7ffa979b02d84915028dff622ff74a438cd7d428a",
+      "evaluation\\pipeline.py": "79fe2d321cd163f97992f289f77b3a71a0dc3b617aef01776d6aec92903de23f",
+      "evaluation\\prepare_dataset.py": "4d719b4c9c4e164a9abab492cc961ada097684a829e805895fbb6d37712f3cb5",
+      "evaluation\\reporting.py": "18c845afa813b348b5dc8a015747f51fc204271acd107cb7ec85833f865fc1c0",
+      "evaluation\\runners\\run_all.py": "2641cd5f848890488e2900e5445a4c454e1210917c95d7ab1e5801582b920352",
+      "evaluation\\runners\\run_intent_eval.py": "44f1786625f99c454bf3c1f2fe868267cd68a4e0ced05b68504235d98fc5ede2",
+      "evaluation\\runners\\run_recovery_eval.py": "bec20633d1071ced659755b180de8a506d0de700ca4f8e16bcf58f937d1e4957",
+      "evaluation\\runners\\run_scope_eval.py": "93b4fa045ee2a80d26b6dc3a0834a683022a9b7c7b6da96671b42b7bb526e31f"
+    },
+    "dataset_sha256": {
+      "intent_cases.json": "607d3fc5def3f079015be0e4d86b462b7125cca6da4a5fe0ff01f270ff3a9461",
+      "recovery_cases.json": "4e42cdfe072b52fa76b25e3625e80920381d9cc7071a72a866f3fd5edc4b7164",
+      "repositories.json": "74b19be6c178e3c940f896a99f99120e6e5faefefc4002e642c2462e85274ba8",
+      "scope_cases.json": "24713339f8f271c67abd1a972a8aaf3b14a43764e59d7d97cf7296e158cff168"
+    },
+    "model": null,
+    "temperature": null,
+    "evidence_as_of": "2026-09-22T17:13:38.613295+00:00"
+  }
+}

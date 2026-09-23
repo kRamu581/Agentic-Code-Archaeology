@@ -33,7 +33,7 @@ Built with **LangGraph, FastAPI, and React**, this project moves beyond traditio
 ## 🏗️ System Architecture
 
 * **Backend:** FastAPI, Python, SQLite
-* **AI Orchestration:** LangGraph (State-machine driven multi-agent workflow), OpenAI API
+* **AI Orchestration:** LangGraph (State-machine driven multi-agent workflow), Gemini API
 * **Frontend:** React, Vite, CSS Grid, `react-force-graph-2d`
 
 ---
@@ -43,7 +43,7 @@ Built with **LangGraph, FastAPI, and React**, this project moves beyond traditio
 ### Prerequisites
 * Python 3.10+
 * Node.js 18+
-* An OpenAI API Key
+* A Gemini API key and explicitly selected model for optional live analysis
 
 ### 1. Backend Setup
 ```bash
@@ -58,8 +58,8 @@ source venv/bin/activate
 
 pip install -r requirements.txt
 
-# Create a .env file and add your OpenAI API Key
-echo "OPENAI_API_KEY=your_actual_key_here" > .env
+# Create a .env file from ../.env.example and configure Gemini if needed
+# Copy ../.env.example to ../.env; set GEMINI_API_KEY and GEMINI_MODEL for live use
 
 # Start the FastAPI server
 uvicorn main:app --reload
@@ -78,15 +78,21 @@ npm run dev
 
 ## 🧪 Running the Evaluation Suite (For Research)
 
-To reproduce the accuracy metrics and generate matplotlib charts for the baseline comparisons:
+The reproducible evaluator uses real pinned Git data and requires human labels
+before scoring. Existing paper claims and illustrative datasets are not evidence.
+See [the annotation guide](evaluation/ANNOTATION_GUIDE.md) for the exact labels,
+case counts, baseline limitations, and live Gemini setup.
 
 ```bash
-cd evaluation/baselines
-python run_evaluation.py
-python ../metrics.py
-python ../generate_report.py
+python -m pip install -r evaluation/requirements.txt
+python -m pytest -q
+python evaluation/runners/run_all.py --smoke
 ```
-*Results and charts will be saved to `evaluation/results/`.*
+
+After annotation, run `python evaluation/runners/run_all.py`; add `--live` for
+Gemini with `GEMINI_API_KEY` and `GEMINI_MODEL` configured. Missing ground truth
+fails clearly. Smoke runs save raw predictions/timings and N/A research metrics.
+Reports: `evaluation/reports/evaluation_report.md`; results: `evaluation/results/`.
 
 ---
 

@@ -1,9 +1,9 @@
 import os
-from google import genai
 
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+try:
+    from backend.services.llm import generate
+except ModuleNotFoundError:
+    from services.llm import generate
 
 def recommend_project(projects):
     if os.getenv("USE_GEMINI_ANALYSIS", "false").lower() != "true":
@@ -42,9 +42,4 @@ Base conclusions only on the provided evidence.
 Do not invent missing project details.
 """
 
-    response = client.models.generate_content(
-        model="gemini-3.6-flash",
-        contents=prompt
-    )
-
-    return response.text
+    return generate(prompt)
