@@ -116,8 +116,12 @@ def execute(dataset, output, *, smoke=False, live=False, tasks=TASKS):
             packages[package] = None
     root = Path(__file__).resolve().parents[1]
     code_files = sorted([*root.glob("evaluation/*.py"), *root.glob("evaluation/runners/*.py"), *root.glob("backend/**/*.py")])
+    try:
+        code_revision = git(root, "rev-parse", "HEAD").strip()
+    except ValueError:
+        code_revision = "not a git repository"
     provenance = {"python": platform.python_version(), "platform": platform.platform(), "packages": packages,
-        "git_version": git(root, "--version").strip(), "code_revision": git(root, "rev-parse", "HEAD").strip(),
+        "git_version": git(root, "--version").strip(), "code_revision": code_revision,
         "code_sha256": {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in code_files},
         "dataset_sha256": {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(Path(dataset).glob("*.json"))},
         "model": os.getenv("GEMINI_MODEL") if live else None, "temperature": 0 if live else None,

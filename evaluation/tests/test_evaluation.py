@@ -186,6 +186,18 @@ def test_duplicate_prepare_never_overwrites_labels(dataset, repo):
     assert (dataset / "intent_cases.json").read_bytes() == before
 
 
+def test_prepare_selects_changed_region_and_independent_scope_quota(repo, tmp_path):
+    directory = tmp_path / "candidate-dataset"
+    result = prepare(repo[0], directory, "fixture", limit=1, scope_limit=2)
+    intent = read_json(directory / "intent_cases.json")[0]
+    assert result["added_intent"] == 1
+    assert result["added_scope"] == 2
+    assert intent["region"] == [2, 2]
+    assert intent["introducing_commit_candidates"] == [repo[2]]
+    assert intent["introducing_commit"] is None
+    assert intent["annotation"]["status"] == "pending"
+
+
 def test_tampered_diff_rejected_even_smoke(dataset):
     cases = read_json(dataset / "scope_cases.json")
     cases[0]["diff"] += "fabricated diff"

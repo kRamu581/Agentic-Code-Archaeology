@@ -11,6 +11,7 @@ def build_repository_graph(commit_history):
         nodes.append({
             "id": commit_id,
             "label": commit["hash"],
+            "message": commit.get("message", ""),
             "type": "commit"
         })
 

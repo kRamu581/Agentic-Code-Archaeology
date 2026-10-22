@@ -1,20 +1,17 @@
 def calculate_recovery_score(project):
-    score = 0
-
-    # Higher completion is better
-    completion = project.get("completion_level", 0)
-    score += completion * 0.5
-
-    # Fewer TODOs is better
-    todo_count = project.get("todo_count", 0)
-    todo_score = max(0, 20 - todo_count)
-    score += todo_score
-
-    # Recent activity
-    activity_score = project.get("activity_score", 0)
-    score += activity_score * 0.3
-
-    return round(min(score, 100), 2)
+    todo_completeness = max(0, 100 - project.get("todo_count", 0) * 5)
+    completion = min(
+        max(0, project.get("completion_level", 0)),
+        todo_completeness,
+    )
+    activity_score = min(100, max(0, project.get("activity_score", 0)))
+    recovery_potential = min(100, max(0, project.get("recovery_potential", 50)))
+    return round(
+        activity_score * 0.40
+        + completion * 0.35
+        + recovery_potential * 0.25,
+        2,
+    )
 
 
 def rank_projects(projects):

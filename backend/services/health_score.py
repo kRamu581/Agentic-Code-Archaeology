@@ -3,32 +3,13 @@ def calculate_health_score(
     intent_analysis,
     recovery_analysis
 ):
-    score = 100
-
-    # Repository information
-    total_commits = repository_summary.get("total_commits", 0)
-    todo_count = repository_summary.get("todo_count", 0)
-
-    # Less Git history
-    if total_commits < 5:
-        score -= 15
-
-    # More unfinished TODOs
-    if todo_count > 10:
-        score -= 15
-
-    # Recovery analysis
-    recovery_text = str(recovery_analysis).lower()
-
-    if "abandoned" in recovery_text:
-        score -= 10
-
-    if "incomplete" in recovery_text:
-        score -= 10
-
-    # Keep score between 0 and 100
-    score = max(0, min(score, 100))
-    return score
+    metrics = calculate_health_metrics(repository_summary, recovery_analysis)
+    score = (
+        metrics["git_activity"] * 0.40
+        + metrics["code_completeness"] * 0.35
+        + metrics["recovery_potential"] * 0.25
+    )
+    return round(max(0, min(score, 100)), 2)
 
 def calculate_health_metrics(
     repository_summary,

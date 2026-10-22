@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime
-from datetime import datetime
+from datetime import datetime, timezone
 
 from database import Base
 
@@ -29,7 +29,9 @@ class RepositoryAnalysis(Base):
 
     final_report = Column(Text)
 
+    result_data = Column(Text)
+
     created_at = Column(
         DateTime,
-        default=datetime.utcnow
+        default=lambda: datetime.now(timezone.utc)
     )

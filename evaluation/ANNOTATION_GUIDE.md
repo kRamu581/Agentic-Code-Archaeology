@@ -9,27 +9,52 @@ start blank. Automated preparation extracts Git facts only.
 
 | Item | Available candidates | Paper-design target | Additional candidates needed if all current candidates qualify |
 |---|---:|---:|---:|
-| Distinct source repositories | 1 | 25 | 24 |
-| Intent cases | 3 | 40 | 37 |
-| Scope task/diff pairs | 3 | 30 | 27 |
-| Distinct unfinished recovery repositories | 1, eligibility unconfirmed | 20 | at least 19 |
-| Total analysis cases | 7, none labelled | 90 | at least 83 |
-| Commits in registered history | 4 | approximately 1,800 | approximately 1,796 |
+| Distinct source repositories | 9 (8 newly added) | 25 | 16 |
+| Intent cases | 23 (20 newly added) | 40 | 17 |
+| Scope task/diff pairs | 18 (15 newly added) | 30 | 12 |
+| Distinct recovery candidate repositories | 9 (unfinished status unconfirmed) | 20 | at least 11 |
+| Total analysis cases | 50, none labelled | 90 | 40 |
+| Commits reachable at registered revisions | 566 | approximately 1,800 | approximately 1,234 |
 
 The targets describe the proposed experiment, not a statistical power guarantee.
 Repositories may contribute both intent and scope cases and belong to the recovery
 cohort. They need not total 40 + 30 + 20 distinct repositories. Count commit SHAs
 within each repository; forked/shared histories require deduplication in a larger study.
 
+### Newly registered repositories
+
+The eight additions have 20–200 commits reachable from their pinned revisions.
+Activity is classified from GitHub `pushed_at` metadata as of 2026-10-14:
+active means pushed within the previous 12 months; abandoned means no push for
+more than three years. Repositories between those thresholds were not selected.
+All generated annotations remain pending.
+
+| ID | Language | Activity | Commits at pin | Pinned revision |
+|---|---|---|---:|---|
+| `autoresearch` | Python | Active | 36 | `228791fb499afffb54b46200aca536f79142f117` |
+| `codex_plugin_cc` | JavaScript | Active | 29 | `db52e28f4d9ded852ab3942cea316258ae4ef346` |
+| `spank` | Go | Active | 62 | `a5f95a002fb29dfc3f705b74565d656239976a54` |
+| `capsule_identity` | Rust | Active | 32 | `1364a437f30122558a70ad703acc23d48f144ee6` |
+| `tinyhttpd` | C | Abandoned | 25 | `fbd25cf755075d803cba09201a8f0dd6ac347c27` |
+| `java8_tutorial` | Java | Abandoned | 150 | `9b79999be76274f0c11a5b1d4a4fff4e785dc774` |
+| `simple_cache` | PHP | Abandoned | 28 | `2d280c2aaa23a120f35d55cfde8581954a8e77fa` |
+| `synx` | Ruby | Abandoned | 200 | `3cf85cc33fee8e40f9e18c2ba34eef1b92f8317f` |
+
+The existing AICAR seed repository has four commits and is retained separately.
+The additions produced 20 intent cases, 15 scope pairs (158 new hunk labels), and
+eight recovery candidates. Exact case IDs, files, regions, and diffs are in the
+three `evaluation/datasets/*_cases.json` files.
+
 For a smaller scored pilot, the full runner needs at least **1 labelled intent
 case, 1 labelled scope pair, and 2 distinct labelled recovery repositories**.
 Every case in the selected task files must be labelled; do not silently drop hard
 cases. Use the task-specific runners to evaluate a completed task independently.
-The current seven candidates do not satisfy even that recovery minimum.
+The recovery minimum is not met merely by having candidate repositories; humans
+must confirm unfinished status and complete the labels.
 
 ## What to label
 
-The current case IDs and selected regions are:
+The original AICAR seed case IDs and selected regions are:
 
 | Intent case | File and inclusive lines |
 |---|---|
@@ -39,8 +64,8 @@ The current case IDs and selected regions are:
 
 The matching scope IDs are `aicar_scope_07b121617c2a` (26 hunks),
 `aicar_scope_df3ad517cd35` (8 hunks), and `aicar_scope_1e253587774c`
-(60 hunks). The recovery candidate is `aicar_recovery` at the pinned current
-revision. All seven annotations are pending.
+(60 hunks). The recovery candidate is `aicar_recovery` at its pinned revision.
+These remain alongside the generated cases; all 50 annotations are pending.
 
 ### Intent: `datasets/intent_cases.json`
 
@@ -59,6 +84,9 @@ Fill in:
 - `introducing_commit`: the full 40-character SHA that introduced the selected
   region. Inspect history; the file's first commit or latest blame is not always
   the region's introducing commit.
+- `introducing_commit_candidates`: generated line-blame SHAs for review only.
+  They are not gold labels; independently verify the relevant commit before
+  choosing an introducing commit.
 - `supporting_commits`: real full SHAs that support the explanation, including
   the introducing commit, no later than the case revision.
 - `annotation.annotator`: a human annotator ID, and `annotation.rationale`: cite
@@ -72,8 +100,9 @@ exclusion rule fixed before running the methods.
 
 ### Scope: `datasets/scope_cases.json`
 
-Current candidates have 26, 8 and 60 text hunks respectively (**94 hunk labels**).
-Their full real diffs and stable `hunk_<digest>` IDs are already populated.
+The 18 scope cases contain 252 text hunks in total: 94 in the original AICAR
+cases and 158 in the new batch. Their full real diffs and stable `hunk_<digest>`
+IDs are already populated.
 Each candidate requires:
 
 - `task`: the original intended task, taken from an actual issue, requirement,
@@ -146,16 +175,18 @@ Clone each selected repository locally, review its suitability, then register it
 
 ```powershell
 git clone https://github.com/OWNER/REPO evaluation/datasets/repositories/REPO
-python evaluation/prepare_dataset.py --repository evaluation/datasets/repositories/REPO --id repo_id --limit 5
+python evaluation/prepare_dataset.py --repository evaluation/datasets/repositories/REPO --id repo_id --limit 5 --scope-limit 3
 ```
 
 Preparation appends candidates, freezes the current HEAD and generates blank
 annotations plus readable JSON evidence packs. It refuses to overwrite an existing
-repository's annotations. Generated scope/intent counts depend on actual source
-commits; `--limit` is an upper bound, not a claimed case count. Select additional
-regions/pairs using real pinned revisions until the intended composition is met.
-Use forward slashes in portable repository paths. Keep the registered snapshots
-available on every machine; no floating HEAD is used during evaluation.
+repository's annotations. `--limit` controls intent regions, and optional
+`--scope-limit` controls scope pairs independently; both select real source
+commits, and each requested count must be reviewed for suitability. Intent
+regions are drawn from changed lines, with line-blame SHAs recorded only as
+introducing-commit candidates. Use forward slashes in portable repository paths.
+Keep the registered snapshots available on every machine; no floating HEAD is
+used during evaluation.
 
 ## Reproduce
 

@@ -2,66 +2,66 @@
 
 **Research title:** *An Agentic AI Framework for Code Intent Analysis, Scope Creep Detection, and Software Project Recovery*
 
-AICAR is a research-oriented software prototype that collects selected GitHub repository evidence and presents code-intent, task-scope, and project-recovery analyses. The current `main` branch uses a React/Vite frontend, a FastAPI backend, GitPython, LangGraph, and SQLite. Gemini analysis is optional and disabled by default. This branch does **not** implement GitHub OAuth; the `/github/repositories` endpoint returns mock examples.
+AICAR is a research-oriented software prototype for exploring why repository code changes exist, whether changes correspond to a task, and what evidence may inform recovery of an unfinished project. It combines Git-based repository extraction, a conditional LangGraph workflow, a React dashboard, SQLite persistence, and optional Gemini and GitHub OAuth integrations.
 
-> **Research integrity:** AICAR is not a validated predictor. The dataset and archived smoke run on this branch have zero human-labelled cases and zero scored cases. No accuracy, precision, recall, F1, nDCG, statistical-significance, time-saving, or comparative-superiority result is established.
+> **Research integrity:** This is an implemented prototype, not a validated predictive system. The working evaluation dataset contains 50 candidate cases and zero human-labelled cases. The archived smoke run scored zero cases. No accuracy, precision, recall, F1, nDCG, statistical-significance, time-saving, or superiority result is established.
 
 ## Abstract
 
-Software repositories preserve commits, changed paths, diffs, and file histories, but those artifacts do not directly explain why a change was made, whether it matches a task, or what work may remain in an inactive project. AICAR is a prototype web application that extracts selected Git evidence from public GitHub repositories and organizes analysis into intent, conditional scope, and recovery paths. A LangGraph workflow coordinates these paths and a report step; a React interface displays the result, a heuristic health score, and a commit-to-file graph. Full-analysis results are stored in SQLite and listed in an analysis-history view.
+Software repositories preserve commits, changed paths, diffs, and file histories, but these records do not by themselves explain why code was introduced, whether a patch matches an intended task, or what work may remain in an inactive project. AICAR collects selected repository evidence and presents intent, scope, and recovery analysis paths in one web application. The frontend uses React 19, TypeScript, Vite, React Router, and Axios; the backend uses FastAPI, Pydantic, SQLAlchemy/SQLite, GitPython, and LangGraph. Optional Gemini calls provide model-assisted narratives, and optional GitHub OAuth supports account-linked repository access.
 
-When `USE_GEMINI_ANALYSIS=false`, the application uses offline fallbacks: intent primarily repeats the newest commit message and summarizes changed filenames, scope reports insufficient evidence, and recovery emits a generic recommendation. The scope agent receives changed-file names rather than line- or hunk-level diffs. Health and ranking scores are deterministic heuristics, not calibrated research measures. The separate evaluation pipeline uses pinned Git evidence, baseline methods, annotation schemas, and metric definitions. The archived run contains one repository, seven candidate cases, zero labelled cases, and zero scored cases; it is an unscored smoke run, not a comparative experiment.
+The full-analysis workflow extracts Git evidence, invokes intent analysis, conditionally invokes scope analysis, invokes recovery analysis, builds a report, calculates code-defined health heuristics, creates a commit-to-file graph, and persists the result. Offline behavior is available but limited: intent is primarily based on the newest commit message, the dashboard scope agent receives changed-file names rather than code hunks, and recovery and health outputs are not calibrated. A separate evaluation pipeline operates on pinned Git evidence and requires human annotations before scoring. Its working dataset contains 9 repositories, 566 reachable commits, 23 intent cases, 18 scope cases, and 9 recovery candidates; all 50 cases are pending annotation. This report describes software behavior and does not claim research effectiveness.
 
 ## Problem and Motivation
 
-Understanding a repository change can require correlating commit messages, diffs, file history, and task context. Assessing whether an inactive repository is practical to continue also requires more than counting commits. AICAR explores an integrated interface for inspecting these signals while keeping uncertainty visible.
-
-The prototype does not establish that commit messages reveal developer intent, that heuristic scores measure project health, or that model outputs are correct. It is intended to support human review, not replace it.
+Understanding a repository change can require correlating commit messages, diffs, file history, and task context. Determining whether a project is practical to continue also requires examining available evidence rather than assuming that activity, TODO counts, or a model-generated recommendation measure viability. AICAR explores a unified interface for these software-maintenance questions while leaving final judgment to developers.
 
 ## Research Objectives
 
-1. Extract selected Git history, changed paths, diffs, file histories, and TODO/FIXME markers from a public GitHub repository.
-2. Orchestrate intent, conditional scope, recovery, and report steps through LangGraph.
-3. Present analysis, history, repository comparison, and a commit-to-file graph through a web interface.
+1. Extract selected commits, diffs, file histories, and TODO/FIXME markers from GitHub repositories.
+2. Organize intent, conditional scope, recovery, and report steps using a LangGraph application workflow.
+3. Present results, graph data, history, and repository comparison through a browser dashboard.
 4. Persist full-analysis results in SQLite.
-5. Provide a separate evaluation pipeline that requires human annotation before computing research metrics.
+5. Provide separate research-evaluation tooling with pinned evidence, baselines, validators, and metrics that require human labels.
 
 ## Implemented Features and Boundaries
 
-| Area | Implementation on this branch | Status / limitation |
+| Area | Implementation | Status and limitation |
 |---|---|---|
-| Dashboard | React pages for dashboard, history, and comparison | Implemented; frontend build and lint are described in the tracked implementation report |
-| Repository extraction | Clone GitHub repository; inspect commit history, selected diffs, file history, TODO/FIXME markers | Implemented; public-repository access requires network and Git |
-| Intent | Uses newest commit, changed files, file history, and evidence-map context; optional Gemini prompt | Offline result is primarily commit-message-derived, low-confidence evidence |
-| Scope | Compares task text to changed-file names; optional Gemini prompt | No per-hunk or line-level diff evidence is passed to this dashboard agent; offline mode says evidence is insufficient |
-| Recovery | Summarizes commit/TODO counts; optional Gemini narrative | Offline recommendation is generic and not calibrated to human recovery judgments |
-| Health score | Deterministic deductions based on commit/TODO thresholds and recovery-text substrings | Heuristic, not validated |
-| Repository comparison | Analyzes multiple repository URLs and returns per-repository health outputs | Ranking quality is not evaluated; input schema has no declared list-size or uniqueness constraints |
-| Project-metric recommendation | Ranks user-supplied project metrics and produces a local or optional Gemini explanation | Not a repository-derived research result |
-| Saved history | `/full-analysis` persists an analysis; `/analysis-history` lists records | No individual-record GET route is defined on this branch |
-| GitHub repository list | `/github/repositories` returns hardcoded mock examples | Not connected to a user’s GitHub account |
-| GitHub OAuth | No OAuth routes or OAuth implementation on this branch | Not implemented here |
-| Evaluation package | Pinned-evidence pipeline, baselines, validation, verifier, metrics, reports | Experimental infrastructure; zero labelled cases in the archived run |
+| Dashboard, history, comparison | React pages connected to the FastAPI API | Implemented; exercised during local demo verification |
+| Repository extraction | Clone and inspect Git history, selected diffs, file history, and TODO/FIXME markers | Implemented with limits; public GitHub access requires network |
+| Intent analysis | Latest commit context and evidence map; optional Gemini prompt | Offline result is largely commit-message-derived and low-confidence |
+| Scope analysis | Optional task text and changed-file names; optional Gemini prompt | Dashboard workflow does not pass per-hunk code evidence; offline result reports insufficient evidence |
+| Recovery | Summary and recommendation; optional Gemini narrative | Offline text is generic; no calibrated recovery measure |
+| Health score | Weighted heuristic from commit activity, TODO count, and recovery text | Implemented, not calibrated or research-validated |
+| Repository comparison | Analyze multiple repositories and rank successful results using heuristic scores | Working workflow; ranking quality is not validated |
+| History/report | Save full-analysis result, generate report, list and reload analyses | Implemented; database is local SQLite |
+| GitHub OAuth | Optional OAuth callback, signed state, encrypted stored token, repository listing | Code is implemented; real OAuth exchange was not verified in the demo |
+| Gemini | Optional provider calls when explicitly enabled and configured | Not verified end-to-end in the demo; offline fallback was used |
+| Evaluation pipeline | Pinned evidence, Git/Git-script baselines, AICAR method, schema validation, evidence checks, metrics | Experimental infrastructure; no labelled cases or scored results |
 
-These are implementation descriptions, not claims of novelty or superiority over other tools.
+These are implementation descriptions, not claims of research novelty or superiority.
 
-## How the Application Works
+## How AICAR Works
 
-1. A user submits a GitHub repository URL in the dashboard or through an API route.
-2. FastAPI validates request fields using Pydantic models.
-3. The repository analyzer clones the repository to a temporary directory and extracts selected recent commits, changed paths, truncated diffs, limited file histories, file counts, and TODO/FIXME markers.
-4. `/full-analysis` obtains the repository result and initializes workflow state.
-5. The LangGraph path runs intent first. It routes to scope only if there are at least two returned commits and both a task description and changed-file list are present. Recovery and report generation follow.
-6. The API computes health measures, builds a graph connecting commits to changed files, saves a full-analysis record in SQLite, and returns the result.
-7. The frontend renders the analysis; the history page retrieves the saved list. The comparison endpoint analyzes repositories and returns health outputs.
+1. A user supplies a GitHub repository URL, with an optional task description.
+2. FastAPI validates the request. The repository analyzer clones the repository to a temporary directory and extracts selected recent commits, changed paths, diffs, file histories, and TODO/FIXME markers.
+3. The full-analysis endpoint constructs workflow state and invokes LangGraph:
+   - intent analysis runs first;
+   - scope runs only if at least two commit entries, a task, and changed files are available;
+   - recovery and report steps then run.
+4. The backend calculates heuristic health values and creates a graph linking commits to changed files.
+5. `/full-analysis` stores the result in SQLite. The frontend displays the result; the history page lists saved analyses.
+6. `/compare-repositories` independently analyzes multiple repositories and ranks successful results by heuristic health score.
 
 ### Application Workflow
 
 ```mermaid
 flowchart TD
-    U[User enters repository URL and optional task] --> API[FastAPI and Pydantic]
-    API --> CLONE[Temporary Git clone and evidence extraction]
-    GH[Public GitHub repository] --> CLONE
+    U[User submits repository URL and optional task] --> API[FastAPI validation]
+    API --> CLONE[Temporary Git clone and extraction]
+    GH[GitHub repository] --> CLONE
+    OAUTH[Optional connected GitHub token] -. private access .-> CLONE
     CLONE --> E[Commits, selected diffs, file history, TODO markers]
     E --> INTENT[Intent node]
     INTENT --> ROUTE{At least 2 commits and task plus changed files?}
@@ -69,86 +69,85 @@ flowchart TD
     ROUTE -- No --> RECOVERY[Recovery node]
     SCOPE --> RECOVERY
     RECOVERY --> REPORT[Report node]
-    REPORT --> SCORE[Heuristic health calculations]
+    REPORT --> HEALTH[Heuristic health calculation]
     REPORT --> GRAPH[Commit-to-file graph]
-    SCORE --> DB[(SQLite)]
+    HEALTH --> DB[(SQLite)]
     GRAPH --> DB
     REPORT --> DB
     DB --> UI[Dashboard and history]
-    GEMINI[Optional Gemini] -. when enabled .-> INTENT
-    GEMINI -. when enabled .-> SCOPE
-    GEMINI -. when enabled .-> RECOVERY
-    GEMINI -. when enabled .-> REPORT
+    GEMINI[Optional Gemini service] -. enabled and configured .-> INTENT
+    GEMINI -. enabled and configured .-> SCOPE
+    GEMINI -. enabled and configured .-> RECOVERY
+    GEMINI -. enabled and configured .-> REPORT
 ```
 
-The graph is a change-history representation, not a source dependency graph. The diagram does not imply a live GitHub account connection.
+The graph represents commit-to-changed-file relationships, not source-code dependency edges.
 
 ### Separate Evaluation Workflow
 
 ```mermaid
 flowchart LR
-    M[Manifest and pinned Git revisions] --> V[Validate provenance and case schemas]
-    V --> P[Reconstruct evidence packs]
-    P --> B[Git baseline, Git-script baseline, AICAR method]
-    P --> L[Optional single-prompt Gemini method]
-    B --> S[Validate predictions and references]
-    L --> S
-    S --> A[Human annotation and adjudication]
-    A --> R[Metrics when required labels exist]
-    R --> O[Raw run data, timings, processed output, report]
+    MANIFEST[Repository manifest and pinned revisions] --> VALIDATE[Validate provenance and case schemas]
+    VALIDATE --> PACK[Reconstruct evidence from Git objects]
+    PACK --> METHODS[Git, Git-script, and AICAR methods]
+    PACK --> LLM[Optional single-prompt Gemini method]
+    METHODS --> CHECK[Validate predictions and evidence references]
+    LLM --> CHECK
+    CHECK --> HUMAN[Human annotation and adjudication]
+    HUMAN --> METRICS[Metrics only when ground truth is complete]
+    METRICS --> OUTPUT[Run manifests, raw outputs, timings, report]
 ```
 
-This evaluation pipeline is separate from the dashboard workflow and does not create human labels automatically.
+The evaluation pipeline is separate from the dashboard workflow. It does not generate human labels.
 
 ## Analysis Details
 
 ### Code Intent
 
-The intent node receives the newest commit, file histories, and an evidence map assembled from commit metadata, changed filenames, selected diffs, and file-history records. In offline mode the agent returns the commit message as the likely intent, summarizes changed-file names, reports low confidence, and cites the commit hash. When Gemini is enabled, a prompt requests structured output based on this context. Prompt context is not independent proof that every generated claim is supported.
+The intent agent receives the newest commit, selected file histories, and an evidence map containing commit, changed-file, diff, and history references. Offline mode primarily reports the commit message as likely intent, summarizes changed filenames, and assigns low confidence. With Gemini enabled, a prompt requests a structured intent explanation based on those inputs. Evidence included in a prompt does not guarantee semantic correctness or independently verified claim support.
 
 ### Scope-Creep Analysis
 
-The scope request contains `task_description` and a list of `changed_files`. The full-analysis request can receive those values directly. The workflow does not automatically derive the task from an issue/PR, and the live dashboard scope agent is given file names rather than code hunks. Offline mode returns `INSUFFICIENT_EVIDENCE`. The evaluation code supports a separate hunk-based task format, but the current archived candidate cases are unlabelled.
+The task may be entered by the user. If a task is supplied without an explicit changed-file list, `/full-analysis` can use changed files from the newest commit. The application scope agent receives filenames, not line-level or hunk-level diff evidence. Offline mode reports `INSUFFICIENT_EVIDENCE`. The separate evaluator includes hunk-oriented cases, but its labels remain pending and those cases are not the live dashboard implementation.
 
 ### Recovery Recommendations
 
-Offline recovery text reports the observed commit and TODO/FIXME counts, states “MEDIUM,” and recommends review, automated tests, and deployment-configuration checks. Optional Gemini prompts request an estimate of possible abandonment cause, completion status, remaining work, recovery potential, and a recommendation. Neither path is calibrated against human recovery judgments.
+Offline recovery output reports commit/TODO counts, gives a generic “MEDIUM” assessment, and recommends review. The optional Gemini prompt requests a narrative about possible abandonment cause, completion status, remaining work, recovery potential, and a recommendation. Neither path is calibrated against human recovery judgments.
 
-### Health Score
+### Health Score and Project Ranking
 
-The repository health score in `backend/services/health_score.py` begins at 100 and applies these deductions:
+The repository-health service computes:
 
-- subtract 15 if total commits are fewer than 5;
-- subtract 15 if TODO/FIXME count is greater than 10;
-- subtract 10 if recovery text contains `abandoned`;
-- subtract 10 if recovery text contains `incomplete`;
-- clamp the result to 0–100.
+- `git_activity = min(total_commits × 5, 100)`
+- `code_completeness = max(0, 100 − 5 × todo_count)`
+- `recovery_potential`: starts at 50; adds 30 if recovery text contains `continue` and 20 if it contains `high potential`, capped at 100
+- `health_score = round(0.40 × git_activity + 0.35 × code_completeness + 0.25 × recovery_potential, 2)`
 
-The same service also returns component metrics: `git_activity = min(total_commits × 5, 100)`; `code_completeness = max(0, 100 − 5 × todo_count)`; and `recovery_potential`, starting at 50 and adding 30 when recovery text contains `continue` and 20 when it contains `high potential`, capped at 100. These values are heuristics, not validated measures of completeness or recovery probability.
+These values are implementation-defined heuristics, not scientifically validated measures of project quality, completion, or recovery probability.
 
-The separate project-metric recommender calculates a weighted score: 40% activity, 35% of the lower of supplied completion and TODO-derived completeness, and 25% supplied recovery potential. It sorts projects by that score. It is not a research result.
+The separate `/recommend-project` endpoint ranks user-supplied project metrics using activity, completion constrained by TODO-derived completeness, and recovery-potential inputs (weights 40%, 35%, and 25%). It is not a repository-derived research result.
 
-### Repository Comparison, History, and Reports
+### Graph, History, and Reports
 
-`POST /compare-repositories` analyzes each supplied URL and returns repository health outputs. It does not persist those comparison results as full-analysis history. `/full-analysis` stores an analysis row, and `/analysis-history` returns saved rows in descending creation time. There is no `/analysis-history/{id}` route in this branch.
+The graph contains commit nodes, changed-file nodes, and edges for observed commit/file changes. The report agent combines repository and agent outputs; offline mode produces a template-style report, while configured Gemini mode requests a narrative.
 
-The report node combines repository summary and agent outputs. Offline mode produces a template-style report; Gemini mode requests a narrative. The graph renders commit nodes and changed-file nodes with edges for observed changes.
+`/full-analysis` saves the result in SQLite. `/analysis-history` lists saved analyses, and `/analysis-history/{analysis_id}` retrieves a saved result. `/analyze` returns extraction and analysis output but does not save a full-analysis record.
 
 ## Technology Stack
 
-| Layer | Technology observed in the branch |
+| Layer | Technology |
 |---|---|
-| Frontend | React 19, Vite, JavaScript/TypeScript source, React Router, Axios |
-| Graph | `react-force-graph-2d` |
-| Backend | Python, FastAPI, Pydantic, Uvicorn, python-dotenv |
+| Frontend | React 19, TypeScript, Vite, React Router, Axios |
+| Graph visualization | `react-force-graph-2d` |
+| Backend/API | Python, FastAPI, Pydantic, Uvicorn |
 | Workflow | LangGraph |
-| Git extraction | GitPython and Git |
+| Repository access | Git CLI, GitPython |
 | Persistence | SQLAlchemy and SQLite |
-| Optional model service | Google Gemini via the Google Gen AI SDK |
-| Frontend checks | Oxlint, TypeScript build, Vite |
-| Evaluation checks | pytest, GitPython, matplotlib |
+| Optional model | Google Gemini through `google-genai` |
+| OAuth/security libraries | HTTPX, itsdangerous, cryptography/Fernet |
+| Tests/lint/build | pytest, Vitest, Testing Library, Oxlint, TypeScript, Vite |
 
-The repository does **not** contain a backend `requirements.txt` or equivalent pinned runtime dependency manifest. `evaluation/requirements.txt` covers evaluation dependencies; it is not the application backend dependency manifest.
+Backend runtime dependencies are in `backend/requirements.txt`, evaluation-only dependencies in `evaluation/requirements.txt`, and frontend dependencies/scripts in `frontend/package.json`. The installed Vite version requires Node.js `^20.19.0 || >=22.12.0`; use a compatible release.
 
 ## Project Structure
 
@@ -156,67 +155,77 @@ The repository does **not** contain a backend `requirements.txt` or equivalent p
 .
 ├── backend/
 │   ├── agents/                 # Intent, scope, recovery, report, recommendation
-│   ├── evaluation/             # Baselines and evaluation runner methods
-│   ├── graph/                  # LangGraph application workflow
+│   ├── graph/                  # LangGraph workflow
 │   ├── models/                 # Request and SQLAlchemy models
-│   ├── services/               # Git evidence, repository extraction, score, LLM
+│   ├── services/               # Git extraction, scoring, graph, OAuth, Gemini
+│   ├── evaluation/             # Evaluation method implementations
+│   ├── main.py                 # FastAPI application and routes
 │   ├── database.py
-│   └── main.py                 # FastAPI endpoints
+│   └── requirements.txt
+├── frontend/
+│   ├── src/components/
+│   ├── src/pages/              # Dashboard, history, comparison
+│   ├── package.json
+│   └── vite.config.ts
 ├── evaluation/
-│   ├── datasets/               # Candidate cases, manifest, evidence
-│   ├── reports/                # Evaluation and implementation reports
-│   ├── runners/                # Task and full evaluation runners
-│   ├── tests/                  # Evaluation tests
+│   ├── datasets/               # Pinned candidate metadata and evidence
+│   ├── tests/
+│   ├── runners/
+│   ├── results/                # Archived evaluation artifacts
+│   ├── reports/
 │   ├── ANNOTATION_GUIDE.md
 │   ├── pipeline.py
 │   ├── dataset.py
 │   ├── metrics.py
 │   └── reporting.py
-├── frontend/
-│   ├── src/components/
-│   ├── src/pages/              # Dashboard, history, comparison
-│   ├── package.json
-│   └── vite.config.ts          # Development proxy
+├── scripts/smoke_test.py
 ├── .env.example
 ├── .gitignore
 ├── pytest.ini
 └── README.md
 ```
 
-The remote repository currently tracks `backend/code_archaeology.db`. Inspect its contents and provenance before distributing or reusing it; do not put private analysis data in a committed database. The root `.gitignore` excludes `.env`, Python caches, `node_modules`, virtual environments, `*.db` for new/untracked database files, frontend build output, and evaluation repository checkouts.
+The Git ignore rules exclude environment files, databases, `node_modules`, virtual environments, caches, build output, test temporary directories, and local evaluation repository checkouts. The evaluation repository checkout folders are deliberately not included in this publication; restore approved source repositories at the pinned revisions before running the expanded local dataset.
 
-## Prerequisites and Local Setup
+## Prerequisites and Setup
 
-Prerequisites: Python, Node.js/npm compatible with the Vite version, Git on `PATH`, and network access for public GitHub clones. No backend Python version or pinned backend dependency set is declared in this branch.
+- Python 3.10 or newer.
+- Node.js 20.19+ or 22.12+ and npm.
+- Git installed and available on `PATH`.
+- Internet access for public GitHub clones.
+- Optional Gemini credentials/model for live model calls.
+- Optional GitHub OAuth application credentials for account-linked access.
 
 ### Backend
 
-Create a virtual environment and install the runtime packages imported by the backend. Because no backend requirements file exists, the following package list is an unpinned setup aid rather than a repository-locked environment:
+From the project root:
 
 ```powershell
 Set-Location backend
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install fastapi uvicorn python-dotenv SQLAlchemy pydantic langgraph GitPython
+python -m pip install -r requirements.txt
 ```
 
-For Command Prompt use `.venv\Scripts\activate.bat`; on macOS/Linux use `source .venv/bin/activate`. Gemini mode additionally requires the Google Gen AI SDK:
+For Command Prompt use `.venv\Scripts\activate.bat`; on macOS/Linux use `source .venv/bin/activate`.
+
+Copy the root environment template to `.env` if configuration is required:
 
 ```powershell
-python -m pip install google-genai
+Copy-Item ..\.env.example ..\.env
 ```
 
-The app reads the project-root `.env` file. Copy `.env.example` to the root as `.env` and set only optional model values if required. Start the backend from the `backend` directory:
+Start FastAPI from the `backend` directory:
 
 ```powershell
 python -m uvicorn main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-The API root is `http://127.0.0.1:8000/`; Swagger UI is `http://127.0.0.1:8000/docs`.
+API root: `http://127.0.0.1:8000/`; Swagger UI: `http://127.0.0.1:8000/docs`.
 
 ### Frontend
 
-In another terminal:
+In a second terminal:
 
 ```powershell
 Set-Location frontend
@@ -224,104 +233,124 @@ npm install
 npm run dev -- --host 127.0.0.1
 ```
 
-Open `http://127.0.0.1:5173/`. Vite proxies requests with the `/api` prefix to FastAPI, stripping that prefix.
+Open `http://127.0.0.1:5173/`. The Vite development proxy forwards `/api/*` to FastAPI and strips the `/api` prefix.
 
-### Offline Public Repository Demo
+### Public Repository Demo
 
-1. Keep `USE_GEMINI_ANALYSIS=false` or unset.
+1. Keep `USE_GEMINI_ANALYSIS=false` or leave it unset.
 2. Start the backend and frontend.
-3. Enter a public repository URL, e.g. `https://github.com/octocat/Spoon-Knife`.
-4. Optionally provide task text and inspect the outputs and their limitations.
-5. Open history to view records saved by full-analysis requests.
-6. Use comparison with multiple public repository URLs.
+3. Submit `https://github.com/octocat/Spoon-Knife` or another public repository.
+4. Optionally enter a task description and review the dashboard outputs, graph, and report.
+5. Open history to reload saved full-analysis results.
+6. Use comparison with at least two distinct public GitHub repositories.
 
-Full-analysis requests create normal saved history records in SQLite. The database URL is hardcoded as `sqlite:///./code_archaeology.db`; when running from `backend`, the database is relative to that working directory. Preserve any existing database data.
+Full analysis writes to the configured SQLite database. The default database is `backend/code_archaeology.db`. Preserve existing data; use a separate database URL for an isolated demo.
 
-## Configuration
+## Environment Variables
 
-The tracked `.env.example` defines:
+The project-root `.env.example` lists these variables:
 
 | Variable | Purpose |
 |---|---|
-| `USE_GEMINI_ANALYSIS` | Set `true` to enable Gemini-backed agent calls; default is `false` |
-| `GEMINI_API_KEY` | Optional Gemini credential, required for live model calls |
-| `GEMINI_MODEL` | Explicit Gemini model name required for live calls |
+| `GEMINI_API_KEY` | Optional Gemini credential |
+| `GEMINI_MODEL` | Explicit Gemini model name for reproducible live calls |
+| `USE_GEMINI_ANALYSIS` | `false` by default; set `true` to enable Gemini-backed agent calls |
+| `GITHUB_CLIENT_ID` | Optional GitHub OAuth application client ID |
+| `GITHUB_CLIENT_SECRET` | Optional GitHub OAuth application secret |
+| `GITHUB_REDIRECT_URI` | OAuth callback URL used by the local Vite proxy |
+| `GITHUB_SESSION_SECRET` | Signing secret for OAuth state/session handling |
+| `GITHUB_TOKEN_ENCRYPTION_KEY` | Fernet key for encrypting stored OAuth tokens |
+| `FRONTEND_URL` | Frontend origin used in callback redirects |
+| `CORS_ORIGINS` | Comma-separated browser origins allowed by FastAPI |
+| `APP_ENV` | `production` enables secure-cookie behavior |
 
-The current branch has no `DATABASE_URL`, GitHub OAuth credential, session-signing, token-encryption, or frontend-origin settings in `.env.example`. Do not assume OAuth or private-repository access is supported by this branch.
+Leave optional values blank if the integration is not being used. Never commit `.env`, tokens, secrets, or encryption keys. OAuth callback configuration should use HTTPS outside local development. The demo did not verify Gemini or OAuth end-to-end.
 
-## API Endpoints
+## API Reference
 
-Request models are defined in `backend/models/requests.py`; inspect `/docs` or `/openapi.json` for the running service's schema.
+The live FastAPI Swagger UI at `/docs` and `/openapi.json` is authoritative for request schemas. Paths below are backend routes; frontend development requests use the `/api` proxy prefix.
 
-| Method | Route | Request / behavior | Side effect |
+| Method | Route | Request/behavior | Persistence |
 |---|---|---|---|
-| `GET` | `/` | Backend status message | None |
-| `GET` | `/github/repositories` | Returns a hardcoded mock list, not account repositories | None |
-| `POST` | `/analyze` | `{"github_url":"https://github.com/owner/repository"}`; extracts and analyzes repository | No full-analysis record |
+| `GET` | `/` | Backend status response | None |
+| `POST` | `/analyze` | `{"github_url":"https://github.com/owner/repository"}` | No full-analysis record |
 | `POST` | `/analyze-scope` | `{"task_description":"...","changed_files":["src/file.ts"]}` | None |
-| `POST` | `/full-analysis` | `{"github_url":"...","task_description":"optional","changed_files":["optional/path"]}` | Saves an analysis-history record |
-| `POST` | `/recommend-project` | `{"projects":[...]}`; accepts project-metric objects | None |
+| `POST` | `/full-analysis` | Repository URL and optional task/changed-file list | Saves analysis record |
+| `POST` | `/recommend-project` | `{"projects":[{"name":"...","completion_level":0,"todo_count":0,"activity_score":0,"recovery_potential":50}]}` | None |
 | `POST` | `/compare-repositories` | `{"repositories":["https://github.com/owner/repo1","https://github.com/owner/repo2"]}` | No full-analysis record |
-| `GET` | `/analysis-history` | Returns all saved analysis records | Read only |
+| `GET` | `/analysis-history` | List saved full-analysis results | Read only |
+| `GET` | `/analysis-history/{analysis_id}` | Read one saved result | Read only |
+| `GET` | `/github/status` | Current browser-session and OAuth configuration status | Read only |
+| `GET` | `/github/login` | Start OAuth; requires configuration | Sets OAuth state/session cookie |
+| `GET` | `/github/callback` | Validate state and process provider callback | May save encrypted token |
+| `GET` | `/github/repositories` | List repositories for connected session | Read only |
+| `POST` | `/github/logout` | Disconnect current session | Removes saved connection |
 
-The request models on this branch use Pydantic `HttpUrl` for repository URLs. Scope fields are basic strings/lists without the stricter bounds present in other development snapshots. The repository comparison model declares a list of strings without a minimum or maximum length. Check the actual Swagger schema before relying on further constraints.
+The project comparison request accepts 2–10 unique GitHub URLs. Repository URL and request size validation are defined in `backend/models/requests.py`. OAuth status being available does not establish a successful OAuth integration.
+
+Example full-analysis body:
+
+```json
+{
+  "github_url": "https://github.com/octocat/Spoon-Knife",
+  "task_description": "Review evidence related to the latest repository change"
+}
+```
 
 ## Testing and Verification
 
-Verification evidence must be tied to the code snapshot that was tested:
+These results were reported from local demo verification on **22 October 2026**. They verify selected software paths, not research accuracy:
 
-| Evidence | Result | Applicability |
+| Check | Result | Scope |
 |---|---|---|
-| Remote branch `main`, archived evaluation run `20260922T172449_3f6dec5e` | `unscored_smoke`; 21 offline executions, 21 successes, 0 errors, 7 skipped, 0 scored cases | Recorded artifact, not a current rerun or research result |
-| Remote branch `evaluation/reports/implementation_summary.md` | Reports 33 Python tests and frontend lint/build success | Historical report; not independently rerun here |
-| Separate local workspace verification, 22 October 2026 | 47 Python tests and 10 frontend tests passed; lint/build passed | That workspace had different code from remote `main`; these counts must not be represented as remote-branch test results |
-| Frontend test script on remote `main` | No `test` script or frontend test files in its package/source tree | `npm test` is not available on this branch |
-| Backend dependency manifest on remote `main` | No `backend/requirements.txt` | The app runtime install is not pinned by this branch |
-| Gemini / GitHub account integration | Not verified | No end-to-end credentials/configuration evidence |
+| Backend Python tests | 47 passed; exit code 0 | Isolated tests/database; provider/network interactions include mocks |
+| Frontend tests | 10 passed across 2 files; exit code 0 | Component/UI tests |
+| Frontend lint | Passed; exit code 0 | Oxlint |
+| TypeScript and production build | Passed; exit code 0 | Build was directed to a temporary output directory |
+| Local smoke checks | 6 of 6 passed | Backend health/history/status and frontend routes |
+| Public GitHub analysis | Verified live | Public repository clone, report, persistence/history reload |
+| Repository comparison | Verified live | Two public repositories; heuristic scores only |
+| Gemini live calls | Not verified | Key/model not configured |
+| GitHub OAuth | Not verified end-to-end | OAuth credentials not configured |
 
-Commands declared by remote `main`:
+Run the documented checks:
 
 ```powershell
-# Backend/evaluation tests (requires Python dependencies)
+# From project root
 python -m pytest -q
+python scripts/smoke_test.py
 
 # Frontend
 Set-Location frontend
+npm test
 npm run lint
 npm run build
 ```
 
-The root `pytest.ini` sets `testpaths = evaluation/tests`. Evaluation dependencies are listed in `evaluation/requirements.txt`. Do not interpret an unscored smoke run or software test pass count as research accuracy.
+Frontend tests and production build do not validate research effectiveness.
 
-## Evaluation Methodology and Status
+## Evaluation Dataset and Methodology
 
-The separate evaluation pipeline uses repository manifests with pinned revisions, validates evidence/case schemas, reconstructs Git evidence packs, runs offline baselines and the AICAR evaluation method, validates output schemas, audits references/extractive quotations, and writes run artifacts. Optional live Gemini evaluation is a distinct mode. Human annotation is required before a scored run; predictions are not used as labels.
+The evaluation package is separate from the dashboard. It validates repository provenance and pinned revisions, reconstructs Git evidence packs, runs Git and Git-script baselines alongside an AICAR task-agent method, optionally runs a single-prompt Gemini method, validates prediction schemas, audits evidence references, and computes metrics only when human labels are present.
 
-### Dataset and Archived Run on This Branch
+The expanded local candidate dataset contains:
 
-The archived run in `evaluation/reports/evaluation_report.md` records:
+| Item | Working-tree count | Annotation |
+|---|---:|---|
+| Registered repositories | 9 | Source/revision records |
+| Reachable commits at pins | 566 | Git-derived count |
+| Intent candidates | 23 | All pending |
+| Scope task/diff candidates | 18 | All pending |
+| Recovery candidates | 9 | Eligibility unconfirmed |
+| Total candidates | 50 | 0 labelled; 50 pending |
 
-| Item | Count/status |
-|---|---:|
-| Repositories | 1 |
-| Reachable commits at pinned revision | 4 |
-| Intent candidates | 3 |
-| Scope candidates | 3 |
-| Recovery candidates | 1 |
-| Total candidates | 7 |
-| Human-labelled cases | 0 |
-| Scored cases | 0 |
-| Run status | `unscored_smoke` |
+The annotation guide's proposed targets are 25 repositories, 40 intent, 30 scope, 20 recovery, and approximately 1,800 commits. These are targets, not achieved counts. Source repository checkouts and expanded code-derived evidence packs are excluded from this publication; obtain and inspect the approved source repositories at the manifest's pinned revisions before running the expanded dataset. The tracked public branch retains its previous, smaller evaluation data.
 
-The annotation guide lists larger proposed design targets (25 repositories, 40 intent, 30 scope, 20 recovery, approximately 1,800 commits). They are targets, not current data or a statistical power guarantee.
+Archived run `20261014T152850_5739f230` is `unscored_smoke`: 200 attempts, 150 executed and successful calls, 0 errors, 50 skipped, and 0 scored cases. Gemini was disabled. The run demonstrates selected offline execution only. Metric values are unavailable (`null`), not zero.
 
-### Metric Definitions
+Metric definitions include normalized exact-match intent accuracy, introducing-commit accuracy, scope precision/recall/F1 with unclear-label handling, recovery nDCG, and an exact-extractive evidence-support measure. Metric definitions are not results; no labels currently support a research score.
 
-When sufficient human labels exist, the pipeline defines normalized exact-match intent accuracy, introducing-commit accuracy, scope precision/recall/F1 with documented unclear handling, graded recovery nDCG, and a limited exact-extractive evidence-support rate. Their definitions are not measured results. With no labels, metrics are unavailable (`null`/N/A), not zero.
-
-### Reproducibility Commands
-
-The archived evaluation instructions use:
+### Reproducibility
 
 ```powershell
 python -m pip install -r evaluation/requirements.txt
@@ -329,41 +358,40 @@ python -m pytest -q
 python evaluation/runners/run_all.py --smoke
 ```
 
-The smoke command writes new artifacts under `evaluation/results/`. A scored run requires complete human annotation for the selected cases. Live mode additionally needs `GEMINI_API_KEY` and `GEMINI_MODEL`; record model and environment details separately.
+The smoke command writes artifacts under `evaluation/results/`. A scored run requires completing the human annotation workflow in `evaluation/ANNOTATION_GUIDE.md`; do not treat the smoke run as a comparative experiment. Live evaluation additionally requires `GEMINI_API_KEY` and `GEMINI_MODEL`.
 
 ## Limitations
 
-- Offline intent is chiefly commit-message extraction, not validated intent reconstruction.
-- Dashboard scope analysis receives file names, not per-hunk code.
-- Recovery recommendations and health measures are generic or heuristic and uncalibrated.
-- The GitHub repository-list endpoint contains mock data; OAuth is not implemented on this branch.
-- The evaluation dataset has zero labelled cases; effectiveness has not been established.
-- Gemini use requires credentials and a model setting; live use is not verified by the archived offline run.
-- There is no pinned backend runtime dependency manifest.
-- Database configuration is hardcoded to a relative SQLite path. The remote repository tracks `backend/code_archaeology.db`; inspect its contents and provenance before distribution, and never store private data in a published database.
-- No production deployment, user study, statistical comparison, or superiority claim is established.
+- Offline intent is primarily commit-message evidence, not semantic reconstruction.
+- Dashboard scope uses filenames rather than per-hunk code evidence; offline output abstains.
+- Offline recovery output is generic and health/recommendation scores are uncalibrated.
+- The separate evidence verifier is not integrated into the live dashboard workflow.
+- The expanded evaluation candidates have zero labels; research effectiveness is unvalidated.
+- Gemini and real GitHub OAuth were not tested end-to-end in the reported demo.
+- Clone/resource limits and production hardening need further review.
+- History is not a complete multi-user authorization system. Keep the development server bound to loopback unless proper deployment access controls are added.
+- A successful local test/build does not establish production readiness or research validity.
 
 ## Security and Data Handling
 
-- Never commit `.env`, API keys, tokens, or private repository contents.
-- Analyze only repositories you are authorized to access. Public cloning consumes network, disk, and time.
-- The current branch does not implement GitHub OAuth or private-repository credentials.
-- The API has no demonstrated multi-user authorization model; keep local development bound to loopback and do not expose it publicly without appropriate access controls.
-- Preserve existing SQLite data. Use a separate clean checkout/database for demos rather than resetting or replacing a database.
-- Review staged file lists before commits. In particular, note that a database file is already tracked on remote `main`.
+- Keep `.env`, model keys, OAuth credentials, signing secrets, encryption keys, and tokens private.
+- Analyze only repositories you are authorized to inspect. Repository cloning consumes network, disk, and time.
+- OAuth tokens are encrypted at rest in the implemented connection model, but this does not by itself establish production security.
+- Use HTTPS and restrictive CORS origins in a deployment. Do not expose the local development API publicly without authentication/authorization and operational controls.
+- Preserve SQLite databases and evaluation data. Do not reset or overwrite a database to prepare a demonstration.
+- Expanded evaluation source checkouts are not included in this publication; review their licenses and provenance before redistribution.
 
 ## Future Work
 
-These items are proposed, not completed capabilities:
+1. Complete evidence-linked human annotations and confirm recovery-case eligibility.
+2. Run scored, reproducible evaluations against the defined baselines.
+3. Provide actual diff hunks and task-source evidence to dashboard scope analysis.
+4. Integrate claim verification into the live workflow and evaluate semantic support.
+5. Calibrate or rename health/recovery measures using independent human judgments.
+6. Validate Gemini and GitHub OAuth end-to-end with controlled credentials.
+7. Add production authorization, database migrations, and stronger clone/resource isolation.
 
-1. Annotate the candidate cases with human-reviewed, evidence-linked labels.
-2. Run scored evaluations and report all failures and unavailable metrics.
-3. Give dashboard scope analysis task-source evidence and actual code hunks.
-4. Integrate claim-support verification into the live workflow.
-5. Calibrate or rename recovery and health measures using independent judgments.
-6. Add a pinned backend dependency manifest and reproducible environment setup.
-7. Implement and verify authenticated GitHub access if private-repository workflows remain in scope.
-8. Add production authorization, deployment, and database-migration controls.
+These are proposed enhancements, not claims of current capability.
 
 ## Citation and Acknowledgement
 
@@ -371,12 +399,12 @@ Verified background reference:
 
 G. Avelino, E. Constantinou, M. T. Valente, and A. Serebrenik, “On the abandonment and survival of open source projects: An empirical investigation,” *arXiv preprint arXiv:1906.08058*, 2019. [Online]. Available: https://arxiv.org/abs/1906.08058.
 
-Other citations in draft research documents need bibliographic verification before they are added here. Acknowledgements should name only people or organizations that actually contributed.
+Other references in the research drafts require manual bibliographic verification before publication. Add acknowledgements only for people or organizations who actually contributed.
 
 ## Screenshots
 
-The tracked frontend includes a hero image asset, but no verified screenshots of the running application were identified for this README. Add genuine captures only after recording them from the actual application; do not present mockups as functional evidence.
+No genuine screenshots of the running application are included. Add real captures only after capturing them from the application; do not use mockups as evidence of working functionality.
 
 ## License
 
-No root license file is present in the inspected branch. No license is asserted here.
+No root license file is present. This README does not assert a license.

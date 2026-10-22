@@ -2,18 +2,18 @@
 
 ## Experimental setup
 
-Run `20260922T172449_3f6dec5e`: **unscored_smoke**. Pinned Git objects; shared evidence per case. Python 3.13.9. Model: disabled. All measurements below come from this run.
+Run `20261014T152850_5739f230`: **unscored_smoke**. Pinned Git objects; shared evidence per case. Python 3.14.3. Model: disabled. All measurements below come from this run.
 
 ## Dataset size
 
 {
-  "intent": 3,
-  "scope": 3,
-  "recovery": 1,
-  "repositories": 1,
-  "commits": 4,
+  "intent": 23,
+  "scope": 18,
+  "recovery": 9,
+  "repositories": 9,
+  "commits": 566,
   "labelled": 0,
-  "pending": 7
+  "pending": 50
 }
 
 ## Dataset composition
@@ -65,7 +65,7 @@ Full-cohort nDCG uses gain 2^grade-1 and log2(position+1) discounts, grades 0..3
 
 ## Analysis time
 
-Measured pipeline seconds: 24.196333; shared validation/extraction: 23.962019. Executed: 21; successful: 21; errors: 0; skipped: 7. See timings.csv for timestamps and actual input counts. validation/extraction plus method execution; shared extraction is measured separately, report/plot generation excluded. No scaling trend or speedup is inferred from a single smoke run.
+Measured pipeline seconds: 814.781433; shared validation/extraction: 814.000881. Executed: 150; successful: 150; errors: 0; skipped: 50. See timings.csv for timestamps and actual input counts. validation/extraction plus method execution; shared extraction is measured separately, report/plot generation excluded. No scaling trend or speedup is inferred from a single smoke run.
 
 ## Comparison table
 

@@ -3,8 +3,15 @@ import re
 import tempfile
 import shutil
 import stat
+import base64
+import subprocess
 from contextlib import contextmanager
 from git import Repo
+
+MAX_COMMITS = 10_000
+MAX_FILES = 10_000
+MAX_REPOSITORY_BYTES = 500 * 1024 * 1024
+MAX_FILE_BYTES = 50 * 1024 * 1024
 
 
 @contextmanager
@@ -75,7 +82,7 @@ def create_evidence_map(commit, file_histories):
 
     return evidence
 
-def analyze_repository_data(github_url: str, *, revision=None, file=None, region=None, as_of=None):
+def analyze_repository_data(github_url: str, *, revision=None, file=None, region=None, as_of=None, auth_token=None):
     if revision is not None:
         from backend.services.git_evidence import snapshot
         return snapshot(github_url, revision, file=file, region=region, as_of=as_of)
@@ -94,7 +101,31 @@ def analyze_repository_data(github_url: str, *, revision=None, file=None, region
             "https_proxy": "",
             "all_proxy": ""
         }
-        Repo.clone_from(github_url, repo_path, env=clone_env)
+        if auth_token:
+            encoded_credentials = base64.b64encode(
+                f"x-access-token:{auth_token}".encode("utf-8")
+            ).decode("ascii")
+            clone_env.update({
+                "GIT_CONFIG_COUNT": "1",
+                "GIT_CONFIG_KEY_0": "http.https://github.com/.extraheader",
+                "GIT_CONFIG_VALUE_0": f"AUTHORIZATION: basic {encoded_credentials}",
+            })
+        clone_environment = os.environ.copy()
+        clone_environment.update(clone_env)
+        try:
+            clone_result = subprocess.run(
+                ["git", "clone", "--", github_url, repo_path],
+                capture_output=True,
+                check=False,
+                encoding="utf-8",
+                errors="replace",
+                env=clone_environment,
+                timeout=120,
+            )
+        except subprocess.TimeoutExpired as error:
+            raise TimeoutError("Repository clone timed out after 120 seconds.") from error
+        if clone_result.returncode:
+            raise RuntimeError(clone_result.stderr.strip() or "Git clone failed.")
         repo = Repo(repo_path)
 
         def get_file_history(repo, file_path):
@@ -145,7 +176,14 @@ def analyze_repository_data(github_url: str, *, revision=None, file=None, region
             except Exception:
                 return []
 
-        commits = list(repo.iter_commits())
+        try:
+            commits = list(repo.iter_commits(max_count=MAX_COMMITS + 1))
+        except ValueError as error:
+            raise ValueError("The repository has no commits yet.") from error
+        if not commits:
+            raise ValueError("The repository has no commits yet.")
+        if len(commits) > MAX_COMMITS:
+            raise ValueError(f"Repository exceeds the {MAX_COMMITS}-commit analysis limit.")
         commit_count = len(commits)
         commit_history = []
 
@@ -183,12 +221,22 @@ def analyze_repository_data(github_url: str, *, revision=None, file=None, region
         file_count = 0
         todos = []
 
+        scanned_bytes = 0
         for root, dirs, files in os.walk(repo_path):
-            if ".git" in root:
-                continue
+            dirs[:] = [directory for directory in dirs if directory != ".git"]
             for file in files:
+                if file_count >= MAX_FILES:
+                    raise ValueError(f"Repository exceeds the {MAX_FILES}-file analysis limit.")
                 file_count += 1
                 file_path = os.path.join(root, file)
+                if os.path.islink(file_path):
+                    continue
+                file_size = os.path.getsize(file_path)
+                if file_size > MAX_FILE_BYTES:
+                    raise ValueError("Repository contains a file larger than the 50 MB analysis limit.")
+                scanned_bytes += file_size
+                if scanned_bytes > MAX_REPOSITORY_BYTES:
+                    raise ValueError("Repository exceeds the 500 MB analysis size limit.")
                 try:
                     with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                         for line_number, line in enumerate(f, start=1):
